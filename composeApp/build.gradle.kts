@@ -1,4 +1,5 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -22,8 +23,16 @@ kotlin {
             }
         }
     }
-    
+
+
+//    val onPhone = System.getenv("SDK_NAME")?.startsWith("iphoneos") ?: false
+//    val a = if (onPhone) {
+//        iosArm64("ios")
+//    } else {
+//        iosX64("ios")
+//    }
     listOf(
+//        a,
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
@@ -53,7 +62,8 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-//            implementation("app.cash.sqldelight:native-driver:2.0.1")
+            // probably needs to be here to be available in ios package
+            implementation("app.cash.sqldelight:native-driver:2.0.1")
         }
     }
 }
