@@ -101,6 +101,11 @@ android {
     }
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
+        // todo: maybe it needs to be here, not below
+//        testImplementation("org.testng:testng:6.9.6")
     }
+}
+dependencies {
+    testImplementation("org.testng:testng:6.9.6")
 }
 
