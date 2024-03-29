@@ -63,7 +63,7 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             // probably needs to be here to be available in ios package
-            implementation("app.cash.sqldelight:native-driver:2.0.1")
+//            implementation("app.cash.sqldelight:native-driver:2.0.1")
         }
     }
 }
