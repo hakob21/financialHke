@@ -62,7 +62,9 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            // don't need this. if adding it, gradle build errors out
+            // don't need this. if adding it, gradle build errors out in GHA. locally running on iOS works in both cases (commented
+            // or uncommented). But ./gradlew build fails in case of uncommented, with the same exception as in GHA. Locally ./gradlew build
+            // fails if commented, because of -> look at the (1) issue in documentation/issues
 //            implementation("app.cash.sqldelight:native-driver:2.0.1")
         }
     }

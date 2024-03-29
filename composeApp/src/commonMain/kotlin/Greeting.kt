@@ -18,7 +18,9 @@ class Greeting(
 //        println(playerQueries.getAllEntries())
         // [HockeyPlayer(15, "Ryan Getzlaf")]
 
-        playerQueries.insertEntry(Long.MAX_VALUE - 1, 3.4)
+        // this gets stored (at least in case of IOS) permanently. on the first run the row is inserted in the DB, but next runs it fails
+//      // because the primary key id is already present in the DB. can change the ID and run again every time
+        playerQueries.insertEntry(Long.MAX_VALUE - 2, 3.4)
         println(playerQueries.getAllEntries().executeAsList())
         // [HockeyPlayer(15, "Ryan Getzlaf"), HockeyPlayer(10, "Corey Perry")]
 
