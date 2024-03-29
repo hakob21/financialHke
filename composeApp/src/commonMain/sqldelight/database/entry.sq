@@ -1,0 +1,13 @@
+CREATE TABLE entryEntity(
+    id INTEGER PRIMARY KEY,
+    sum REAL
+);
+
+insertEntry:
+INSERT INTO entryEntity(
+    id,
+    sum
+) VALUES (?, ?);
+
+getAllEntries:
+SELECT * FROM entryEntity;

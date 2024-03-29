@@ -35,11 +35,16 @@ kotlin {
     }
     
     sourceSets {
+        iosMain.dependencies {
+            implementation("app.cash.sqldelight:native-driver:2.0.1")
+        }
         
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
             implementation("app.cash.sqldelight:android-driver:2.0.1")
+            // android Context library https://proandroiddev.com/how-to-avoid-asking-for-android-context-in-kotlin-multiplatform-libraries-api-d280a4adebd2
+            implementation("androidx.startup:startup-runtime:1.1.0")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -48,7 +53,7 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation("app.cash.sqldelight:native-driver:2.0.1")
+//            implementation("app.cash.sqldelight:native-driver:2.0.1")
         }
     }
 }
