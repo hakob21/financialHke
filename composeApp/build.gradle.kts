@@ -46,6 +46,10 @@ kotlin {
     sourceSets {
         iosMain.dependencies {
             implementation("app.cash.sqldelight:native-driver:2.0.1")
+            // i don't think this is needed
+            implementation("io.insert-koin:koin-core")
+//            implementation("io.insert-koin:koin-core") for some reason works even uncommented
+
         }
         
         androidMain.dependencies {
@@ -66,6 +70,9 @@ kotlin {
             // or uncommented). But ./gradlew build fails in case of uncommented, with the same exception as in GHA. Locally ./gradlew build
             // fails if commented, because of -> look at the (1) issue in documentation/issues
 //            implementation("app.cash.sqldelight:native-driver:2.0.1")
+
+            implementation(platform("io.insert-koin:koin-bom:3.5.3"))
+            implementation("io.insert-koin:koin-core")
         }
     }
 }
