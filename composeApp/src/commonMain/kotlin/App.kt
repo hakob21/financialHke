@@ -8,16 +8,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import app.cash.sqldelight.db.SqlDriver
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 import financialhke.composeapp.generated.resources.Res
 import financialhke.composeapp.generated.resources.compose_multiplatform
-import org.hakob.financialhke.database.Database
-import shared.DriverFactory
-import shared.createDatabase
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

@@ -1,5 +1,5 @@
+import db.dbconfig.createDatabaseHke
 import org.hakob.financialhke.database.Database
-import shared.createDatabaseHke
 
 class Greeting(
 ) {

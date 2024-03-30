@@ -1,4 +1,4 @@
-package shared
+package db.dbconfig
 
 import android.content.Context
 import app.cash.sqldelight.db.SqlDriver
