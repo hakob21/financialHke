@@ -107,5 +107,16 @@ android {
 }
 dependencies {
     testImplementation("org.testng:testng:6.9.6")
+    // koin
+    implementation(platform("io.insert-koin:koin-bom:3.5.3"))
+    implementation("io.insert-koin:koin-core")
+
+    // Koin Test features
+    testImplementation("io.insert-koin:koin-test")
+    // Koin for JUnit 4
+    testImplementation("io.insert-koin:koin-test-junit4")
+    // Koin for JUnit 5
+    testImplementation("io.insert-koin:koin-test-junit5")
+
 }
 
