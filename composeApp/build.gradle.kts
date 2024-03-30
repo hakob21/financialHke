@@ -71,7 +71,7 @@ kotlin {
             // fails if commented, because of -> look at the (1) issue in documentation/issues
 //            implementation("app.cash.sqldelight:native-driver:2.0.1")
 
-            implementation(platform("io.insert-koin:koin-bom:3.5.3"))
+            implementation(project.dependencies.platform("io.insert-koin:koin-bom:3.5.3"))
             implementation("io.insert-koin:koin-core")
         }
     }
