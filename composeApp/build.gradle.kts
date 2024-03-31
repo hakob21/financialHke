@@ -58,6 +58,7 @@ kotlin {
             implementation("app.cash.sqldelight:android-driver:2.0.1")
             // android Context library https://proandroiddev.com/how-to-avoid-asking-for-android-context-in-kotlin-multiplatform-libraries-api-d280a4adebd2
             implementation("androidx.startup:startup-runtime:1.1.0")
+            implementation("io.insert-koin:koin-android")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -73,6 +74,8 @@ kotlin {
 
             implementation(project.dependencies.platform("io.insert-koin:koin-bom:3.5.3"))
             implementation("io.insert-koin:koin-core")
+            implementation("io.insert-koin:koin-compose")
+
         }
     }
 }
@@ -116,6 +119,7 @@ dependencies {
     testImplementation("org.testng:testng:6.9.6")
     // koin
     implementation(platform("io.insert-koin:koin-bom:3.5.3"))
+    implementation("io.insert-koin:koin-android")
     implementation("io.insert-koin:koin-core")
 
     // Koin Test features

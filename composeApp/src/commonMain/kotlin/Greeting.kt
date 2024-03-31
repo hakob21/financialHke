@@ -2,6 +2,7 @@ import db.dbconfig.createDatabaseHke
 import org.hakob.financialhke.database.Database
 
 class Greeting(
+    val entryDataSource: EntryDataSource
 ) {
     private val platform = getPlatform()
 
