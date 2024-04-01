@@ -1,9 +1,8 @@
+import com.hakob.financialhke.Greeting
 import database.EntryEntity
-import db.SqlDelightEntryDataSource
 import io.mockative.Mock
 import io.mockative.any
 import io.mockative.classOf
-import io.mockative.coEvery
 import io.mockative.every
 import io.mockative.mock
 import kotlin.test.AfterTest
