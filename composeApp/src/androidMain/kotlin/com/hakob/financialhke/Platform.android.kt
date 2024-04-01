@@ -1,5 +1,5 @@
-import android.app.Application
-import android.content.Context
+package com.hakob.financialhke
+
 import android.os.Build
 
 class AndroidPlatform : Platform {

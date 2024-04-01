@@ -1,3 +1,5 @@
+package com.hakob.financialhke
+
 import platform.UIKit.UIDevice
 
 class IOSPlatform: Platform {
