@@ -4,7 +4,7 @@ import android.content.Context
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.hakob.financialhke.applicationContext
-import org.hakob.financialhke.database.Database
+import com.hakob.financialhke.database.Database
 
 actual class DriverFactory(private val context: Context) {
     actual fun createDriver(): SqlDriver {

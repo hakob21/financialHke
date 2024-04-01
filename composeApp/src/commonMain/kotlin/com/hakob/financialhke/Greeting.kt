@@ -1,8 +1,8 @@
 package com.hakob.financialhke
 
 import EntryDataSource
+import com.hakob.financialhke.database.Database
 import com.hakob.financialhke.db.dbconfig.createDatabaseHke
-import org.hakob.financialhke.database.Database
 
 class Greeting(
     val entryDataSource: EntryDataSource

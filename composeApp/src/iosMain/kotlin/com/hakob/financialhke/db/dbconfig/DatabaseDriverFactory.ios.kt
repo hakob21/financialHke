@@ -2,7 +2,7 @@ package com.hakob.financialhke.db.dbconfig
 
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.native.NativeSqliteDriver
-import org.hakob.financialhke.database.Database
+import com.hakob.financialhke.database.Database
 
 actual fun createDatabaseHke(): Database {
     return Database(NativeSqliteDriver(Database.Schema, "test.db"))

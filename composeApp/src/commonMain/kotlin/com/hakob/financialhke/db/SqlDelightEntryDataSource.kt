@@ -1,8 +1,8 @@
 package com.hakob.financialhke.db
 
 import EntryDataSource
-import database.EntryEntity
-import database.EntryQueries
+import com.hakob.financialhke.database.EntryEntity
+import com.hakob.financialhke.database.EntryQueries
 import com.hakob.financialhke.domain.Entry
 
 class SqlDelightEntryDataSource(
