@@ -60,6 +60,12 @@ kotlin {
             implementation("androidx.startup:startup-runtime:1.1.0")
             implementation("io.insert-koin:koin-android")
         }
+        getByName("androidUnitTest").dependencies {
+            implementation("app.cash.sqldelight:sqlite-driver:2.0.1")
+//            implementation("org.jetbrains.kotlin:kotlin-test:1.9.22") // version should be same as Kotlin version of the project. this dep adds @BeforeTest annotations and such
+            //            implementation("androidx.test.ext:junit-ktx:1.1.5") // not sure why this might be needed. just keeping it commented to not copy it again from TOML of KampIt project
+
+        }
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -76,6 +82,10 @@ kotlin {
             implementation("io.insert-koin:koin-core")
             implementation("io.insert-koin:koin-compose")
 
+        }
+        commonTest.dependencies {
+            implementation("org.jetbrains.kotlin:kotlin-test:1.9.22") // version should be same as Kotlin version of the project. this dep adds @BeforeTest annotations and such. also @Test annotation
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
         }
     }
 }
@@ -128,6 +138,7 @@ dependencies {
     testImplementation("io.insert-koin:koin-test-junit4")
     // Koin for JUnit 5
     testImplementation("io.insert-koin:koin-test-junit5")
+    testImplementation("org.testng:testng:6.9.6")
 
 }
 

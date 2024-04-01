@@ -1,14 +1,19 @@
 package db
 
 import EntryDataSource
+import database.EntryEntity
 import database.EntryQueries
 import domain.Entry
 
-class SqlDelightEntryDataSource(db: EntryQueries): EntryDataSource {
-    val insertQuery = db.insertEntry(Long.MAX_VALUE, 3.4)
+class SqlDelightEntryDataSource(
+    val db: EntryQueries
+) : EntryDataSource {
     val getQuery = db.getAllEntries()
     override suspend fun insertEntry(entry: Entry) {
-        val get = getQuery
-        println(get.executeAsList().get(0))
+        db.insertEntry(entry.id.toLong(), entry.sum)
+    }
+
+    override suspend fun getEntry(id: Int): EntryEntity {
+        return getQuery.executeAsList().get(0)
     }
 }
