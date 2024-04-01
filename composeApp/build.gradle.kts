@@ -2,10 +2,12 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kotlinMultiplatform) // same as declaring kotlin("multiplatform"). not sure what it does and how the kotlin("multiplatform") works
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     id("app.cash.sqldelight") version "2.0.1"
+    id("com.google.devtools.ksp") version "1.9.23-1.0.19" // for mockative https://github.com/mockative/mockative
+    kotlin("plugin.allopen") version "1.9.23" // for mockative https://github.com/mockative/mockative. All-open compiler plugin https://kotlinlang.org/docs/all-open-plugin.html
 }
 
 sqldelight {
@@ -86,6 +88,7 @@ kotlin {
         commonTest.dependencies {
             implementation("org.jetbrains.kotlin:kotlin-test:1.9.22") // version should be same as Kotlin version of the project. this dep adds @BeforeTest annotations and such. also @Test annotation
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+            implementation("io.mockative:mockative:2.1.0") // for mocking https://github.com/mockative/mockative
         }
     }
 }
@@ -139,6 +142,13 @@ dependencies {
     // Koin for JUnit 5
     testImplementation("io.insert-koin:koin-test-junit5")
     testImplementation("org.testng:testng:6.9.6")
+
+    // for Mockative https://github.com/mockative/mockative
+    configurations
+        .filter { it.name.startsWith("ksp") && it.name.contains("Test") }
+        .forEach {
+            add(it.name, "io.mockative:mockative-processor:2.1.0")
+        }
 
 }
 
