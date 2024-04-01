@@ -1,4 +1,6 @@
-import com.hakob.financialhke.Greeting
+package com.hakob.financialhke
+
+import EntryDataSource
 import database.EntryEntity
 import io.mockative.Mock
 import io.mockative.any
