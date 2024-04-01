@@ -10,6 +10,16 @@ plugins {
     kotlin("plugin.allopen") version "1.9.23" // for mockative https://github.com/mockative/mockative. All-open compiler plugin https://kotlinlang.org/docs/all-open-plugin.html
 }
 
+// for mockative https://github.com/mockative/mockative
+val taskIsRunningTest = gradle.startParameter.taskNames.any {
+    it == "check" || it.startsWith("test") || it.contains("Test")
+}
+if (taskIsRunningTest) {
+    allOpen {
+        annotation("io.github.Mockable")
+    }
+}
+
 sqldelight {
     databases {
         create("Database") {
