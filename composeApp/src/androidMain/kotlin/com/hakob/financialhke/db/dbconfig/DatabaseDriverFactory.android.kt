@@ -1,4 +1,4 @@
-package db.dbconfig
+package com.hakob.financialhke.db.dbconfig
 
 import android.content.Context
 import app.cash.sqldelight.db.SqlDriver
