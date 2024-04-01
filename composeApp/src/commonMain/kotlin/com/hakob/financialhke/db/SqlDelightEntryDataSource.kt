@@ -3,7 +3,7 @@ package com.hakob.financialhke.db
 import EntryDataSource
 import database.EntryEntity
 import database.EntryQueries
-import domain.Entry
+import com.hakob.financialhke.domain.Entry
 
 class SqlDelightEntryDataSource(
     val db: EntryQueries

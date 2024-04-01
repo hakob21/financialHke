@@ -1,5 +1,5 @@
 import database.EntryEntity
-import domain.Entry
+import com.hakob.financialhke.domain.Entry
 
 interface EntryDataSource {
     fun insertEntry(entry: Entry)

@@ -1,4 +1,4 @@
-//import koin.coreModule
+package com.hakob.financialhke//import koin.coreModule
 //import koin.platformModule
 //import org.koin.core.context.startKoin
 //
