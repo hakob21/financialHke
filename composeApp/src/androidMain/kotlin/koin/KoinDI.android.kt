@@ -2,7 +2,7 @@ package koin
 
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
-import db.SqlDelightEntryDataSource
+import com.hakob.financialhke.db.SqlDelightEntryDataSource
 import org.hakob.financialhke.applicationContext
 import org.hakob.financialhke.database.Database
 import org.koin.dsl.module

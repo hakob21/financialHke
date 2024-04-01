@@ -1,4 +1,4 @@
-package db
+package com.hakob.financialhke.db
 
 import EntryDataSource
 import database.EntryEntity

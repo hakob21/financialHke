@@ -1,4 +1,4 @@
-package db.dbconfig
+package com.hakob.financialhke.db.dbconfig
 
 import app.cash.sqldelight.db.SqlDriver
 import org.hakob.financialhke.database.Database
