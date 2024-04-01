@@ -1,4 +1,4 @@
-package org.hakob.financialhke
+package com.hakob.financialhke
 
 import android.content.Context
 import androidx.startup.Initializer

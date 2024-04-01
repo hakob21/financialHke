@@ -1,4 +1,4 @@
-package org.hakob.financialhke
+package com.hakob.financialhke
 
 import App
 import android.os.Bundle

@@ -1,3 +1,3 @@
-package org.hakob.financialhke
+package com.hakob.financialhke
 
 public object KLocationContext
