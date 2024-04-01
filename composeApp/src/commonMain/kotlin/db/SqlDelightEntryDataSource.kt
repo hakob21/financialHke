@@ -9,11 +9,11 @@ class SqlDelightEntryDataSource(
     val db: EntryQueries
 ) : EntryDataSource {
     val getQuery = db.getAllEntries()
-    override suspend fun insertEntry(entry: Entry) {
+    override fun insertEntry(entry: Entry) {
         db.insertEntry(entry.id.toLong(), entry.sum)
     }
 
-    override suspend fun getEntry(id: Int): EntryEntity {
+    override fun getEntry(id: Int): EntryEntity {
         return getQuery.executeAsList().get(0)
     }
 }
