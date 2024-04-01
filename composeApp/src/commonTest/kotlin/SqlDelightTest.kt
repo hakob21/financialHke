@@ -1,6 +1,7 @@
 import database.EntryEntity
 import database.EntryQueries
 import com.hakob.financialhke.db.SqlDelightEntryDataSource
+import com.hakob.financialhke.testDbConnection
 import domain.Entry
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
