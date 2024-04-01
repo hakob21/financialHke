@@ -1,4 +1,4 @@
-package koin
+package com.hakob.financialhke.koin
 
 import EntryDataSource
 import com.hakob.financialhke.Greeting

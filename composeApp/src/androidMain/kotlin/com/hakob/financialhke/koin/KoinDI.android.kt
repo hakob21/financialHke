@@ -1,4 +1,4 @@
-package koin
+package com.hakob.financialhke.koin
 
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver

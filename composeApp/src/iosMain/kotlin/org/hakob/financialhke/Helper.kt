@@ -1,7 +1,7 @@
 package org.hakob.financialhke
 
-import koin.coreModule
-import koin.platformModule
+import com.hakob.financialhke.koin.coreModule
+import com.hakob.financialhke.koin.platformModule
 import org.koin.core.context.startKoin
 
 fun initKoin() {

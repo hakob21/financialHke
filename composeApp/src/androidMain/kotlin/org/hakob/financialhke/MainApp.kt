@@ -4,9 +4,9 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import koin.coreModule
-import koin.initKoin
-import koin.platformModule
+import com.hakob.financialhke.koin.coreModule
+import com.hakob.financialhke.koin.initKoin
+import com.hakob.financialhke.koin.platformModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.parameter.parametersOf
