@@ -1,4 +1,4 @@
-package org.hakob.financialhke
+package com.hakob.financialhke
 
 import com.hakob.financialhke.koin.coreModule
 import com.hakob.financialhke.koin.platformModule
