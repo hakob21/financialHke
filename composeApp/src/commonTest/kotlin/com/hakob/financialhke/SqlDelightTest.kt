@@ -28,11 +28,16 @@ class SqlDelightTest {
     }
 
     @Test
-    fun `should get inserted entry`() = runTest {
-        dbHelper.insertEntry(Entry(1, 2.2))
-        val actualEntryEntity: EntryEntity = dbHelper.getEntry(1)
+    fun `should insert an Entry record to the DB and fetch all entries where single record is the inserted Entry`() = runTest {
+        // given
+        val entryRecordToInsert = Entry(1, 2.2)
 
-        assertEquals<EntryEntity>(EntryEntity(1, 2.2), actualEntryEntity)
+        // when
+        dbHelper.insertEntry(entryRecordToInsert)
+        val actualEntryEntity: List<Entry> = dbHelper.getEntry(1)
+
+        // then
+        assertEquals(listOf(entryRecordToInsert), actualEntryEntity)
     }
 
 //    @Test

@@ -2,6 +2,7 @@ package com.hakob.financialhke
 
 import EntryDataSource
 import com.hakob.financialhke.database.EntryEntity
+import com.hakob.financialhke.domain.Entry
 import io.mockative.Mock
 import io.mockative.any
 import io.mockative.classOf
@@ -41,8 +42,8 @@ class GreetingTest {
 
     @Test
     fun greet() {
-        val expected = EntryEntity(1, 1.1)
-        every { entryDataSource.getEntry(any()) }.returns(EntryEntity(1, 1.1))
+        val expected = listOf(Entry(1, 1.1))
+        every { entryDataSource.getEntry(any()) }.returns(listOf(Entry(1, 1.1)))
         val actual = entryDataSource.getEntry(1)
 
         assertEquals(expected, actual)
