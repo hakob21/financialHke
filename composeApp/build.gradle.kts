@@ -79,6 +79,14 @@ kotlin {
 
         }
         commonMain.dependencies {
+            //          check these links
+//            https://github.com/JetBrains/compose-multiplatform/issues/3437#issuecomment-1872079239
+//            https://github.com/dima-avdeev-jb/issue-3437-sql-delight-compilation
+//            instead of `implementation(compose.runtime)` we might need to use `api(compose.runtime)`.
+//            But according to the message
+//            it works with xcode command line tools build command and not ./gradlew build
+//            the xcode command line tool command is
+//            /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project "/Users/hakobharutyunyan/projects/Financial Hke/iosApp/iosApp.xcodeproj" -scheme iosApp -configuration Debug "OBJROOT=/Users/hakobharutyunyan/projects/Financial Hke/build/ios" "SYMROOT=/Users/hakobharutyunyan/projects/Financial Hke/build/ios" -destination id=57384CD6-391F-4D61-B1C4-8A67F026F7DF -allowProvisioningDeviceRegistration -allowProvisioningUpdates
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)

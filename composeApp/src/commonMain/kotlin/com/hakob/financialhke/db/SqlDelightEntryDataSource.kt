@@ -6,9 +6,9 @@ import com.hakob.financialhke.database.EntryQueries
 import com.hakob.financialhke.domain.Entry
 
 class SqlDelightEntryDataSource(
-    val queries: EntryQueries
+    private val queries: EntryQueries
 ) : EntryDataSource {
-    val getQuery = queries.getAllEntries()
+
     override fun insertEntry(entry: Entry) {
         queries.insertEntry(entry.id.toLong(), entry.sum)
     }

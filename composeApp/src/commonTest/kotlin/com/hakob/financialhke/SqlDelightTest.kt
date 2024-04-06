@@ -1,7 +1,6 @@
 package com.hakob.financialhke
 
 import EntryDataSource
-import com.hakob.financialhke.database.EntryEntity
 import com.hakob.financialhke.database.EntryQueries
 import com.hakob.financialhke.db.SqlDelightEntryDataSource
 import com.hakob.financialhke.domain.Entry
@@ -20,25 +19,27 @@ class SqlDelightTest {
 
     @BeforeTest
     fun setup() = runTest {
-        dbHelper = SqlDelightEntryDataSource(
-            EntryQueries(
-                testDbConnection()
+        dbHelper =
+            SqlDelightEntryDataSource(
+                EntryQueries(
+                    sqlDriverForTesting()
+                )
             )
-        )
     }
 
     @Test
-    fun `should insert an Entry record to the DB and fetch all entries where single record is the inserted Entry`() = runTest {
-        // given
-        val entryRecordToInsert = Entry(1, 2.2)
+    fun `should insert an Entry record to the DB and fetch all entries where single record is the inserted Entry`() =
+        runTest {
+            // given
+            val entryRecordToInsert = Entry(1, 2.2)
 
-        // when
-        dbHelper.insertEntry(entryRecordToInsert)
-        val actualEntryEntity: List<Entry> = dbHelper.getEntry(1)
+            // when
+            dbHelper.insertEntry(entryRecordToInsert)
+            val actualEntryEntity: List<Entry> = dbHelper.getEntry(1)
 
-        // then
-        assertEquals(listOf(entryRecordToInsert), actualEntryEntity)
-    }
+            // then
+            assertEquals(listOf(entryRecordToInsert), actualEntryEntity)
+        }
 
 //    @Test
 //    fun `Select Item by Id Success`() = runTest {
