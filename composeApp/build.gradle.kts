@@ -23,7 +23,7 @@ if (taskIsRunningTest) {
 sqldelight {
     databases {
         create("Database") {
-            packageName.set("org.hakob.financialhke.database")
+            packageName.set("com.hakob.financialhke.database")
         }
     }
 }
