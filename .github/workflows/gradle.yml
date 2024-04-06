@@ -46,7 +46,19 @@ jobs:
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
     - name: Build with Gradle Wrapper
-      run: ./gradlew build
+#      this will run ios target tests in case the os is macos and target is iosEmulator
+#      but it will run ./gradlew build in case of os ubuntu and target is android
+      run: |
+        if [ "${{ matrix.target }}" = "iosSimulatorArm64Test" ]; then
+          # Add the command for iosSimulatorArm64Test
+          echo "Running iosSimulatorArm64Test build"
+          # Your command here
+          ./gradlew iosSimulatorArm64Test 
+        elif [ "${{ matrix.target }}" = "testDebugUnitTest" ]; then
+          # Add the command for testDebugUnitTest
+          echo "Running testDebugUnitTest build"
+          ./gradlew build
+        fi
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
