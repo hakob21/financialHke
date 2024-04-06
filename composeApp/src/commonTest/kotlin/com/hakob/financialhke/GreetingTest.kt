@@ -1,7 +1,7 @@
 package com.hakob.financialhke
 
 import EntryDataSource
-import database.EntryEntity
+import com.hakob.financialhke.database.EntryEntity
 import io.mockative.Mock
 import io.mockative.any
 import io.mockative.classOf
