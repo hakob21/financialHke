@@ -2,7 +2,7 @@ package com.hakob.financialhke.koin
 
 import EntryDataSource
 import com.hakob.financialhke.Greeting
-import database.EntryQueries
+import com.hakob.financialhke.database.EntryQueries
 import com.hakob.financialhke.db.SqlDelightEntryDataSource
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin

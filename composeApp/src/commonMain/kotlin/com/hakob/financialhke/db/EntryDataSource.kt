@@ -1,4 +1,4 @@
-import database.EntryEntity
+import com.hakob.financialhke.database.EntryEntity
 import com.hakob.financialhke.domain.Entry
 
 interface EntryDataSource {
