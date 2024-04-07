@@ -20,7 +20,7 @@ jobs:
       matrix:
         include:
           - target: iosSimulatorArm64Test
-            os: macos-latest
+            os: macos-14
 #          - target: jvmTest
 #            os: ubuntu-latest
 #          - target: linuxX64Test
@@ -35,7 +35,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-      if: matrix.os == 'macos-latest' && matrix.target == 'iosSimulatorArm64Test'
+      if: matrix.os == 'macos-14' && matrix.target == 'iosSimulatorArm64Test'
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
@@ -52,12 +52,12 @@ jobs:
     - name: Run iOS tests
       #      this will run ios target tests in case the os is macos and target is iosEmulator
       #      but it will run ./gradlew build in case of os ubuntu and target is android
-      if: matrix.os == 'macos-latest' && matrix.target == 'iosSimulatorArm64Test'
+      if: matrix.os == 'macos-14' && matrix.target == 'iosSimulatorArm64Test'
       run: ./gradlew iosSimulatorArm64Test
 
       # run xcode build
     - name: Xcodebuild Action
-      if: matrix.os == 'macos-latest' && matrix.target == 'iosSimulatorArm64Test'
+      if: matrix.os == 'macos-14' && matrix.target == 'iosSimulatorArm64Test'
       uses: sersoft-gmbh/xcodebuild-action@v3.2.0
       with:
         project: iosApp/iosApp.xcodeproj
