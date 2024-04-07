@@ -1,31 +1,28 @@
 package com.hakob.financialhke
 
 import EntryDataSource
-import com.hakob.financialhke.database.Database
-import com.hakob.financialhke.db.dbconfig.createDatabaseHke
+import com.hakob.financialhke.domain.Entry
 
 class Greeting(
-    val entryDataSource: EntryDataSource
+    val entryDataSource: EntryDataSource,
 ) {
     private val platform = getPlatform()
 
     fun greet(): String {
-        val db = createDatabaseHke()
-        doDbThings(db)
+        doDbThings()
         return "Hello, ${platform.name}!"
     }
 
-    fun doDbThings(database: Database) {
+    fun doDbThings() {
 //        val database = Database(driver)
-        val playerQueries = database.entryQueries
 
 //        println(playerQueries.getAllEntries())
         // [HockeyPlayer(15, "Ryan Getzlaf")]
 
         // this gets stored (at least in case of IOS) permanently. on the first run the row is inserted in the DB, but next runs it fails
 //      // because the primary key id is already present in the DB. can change the ID and run again every time
-        playerQueries.insertEntry(Long.MAX_VALUE - 2, 3.4)
-        println(playerQueries.getAllEntries().executeAsList())
+        entryDataSource.insertEntry(Entry(1, 2.0))
+        println(entryDataSource.getAllEntries(1))
         // [HockeyPlayer(15, "Ryan Getzlaf"), HockeyPlayer(10, "Corey Perry")]
 
     }

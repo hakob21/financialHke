@@ -13,7 +13,7 @@ class SqlDelightEntryDataSource(
         queries.insertEntry(entry.id.toLong(), entry.sum)
     }
 
-    override fun getEntry(id: Int): List<Entry> {
+    override fun getAllEntries(id: Int): List<Entry> {
         return queries.getAllEntries().executeAsList().map { it.toDomainEntry() }
     }
 

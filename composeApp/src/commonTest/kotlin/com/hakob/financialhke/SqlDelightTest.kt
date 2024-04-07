@@ -35,7 +35,7 @@ class SqlDelightTest {
 
             // when
             dbHelper.insertEntry(entryRecordToInsert)
-            val actualEntryEntity: List<Entry> = dbHelper.getEntry(1)
+            val actualEntryEntity: List<Entry> = dbHelper.getAllEntries(1)
 
             // then
             assertEquals(listOf(entryRecordToInsert), actualEntryEntity)
