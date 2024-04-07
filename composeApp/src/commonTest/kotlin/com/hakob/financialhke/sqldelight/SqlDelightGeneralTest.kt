@@ -32,8 +32,9 @@ class SqlDelightGeneralTest {
 
             // when
             entryRepository.insertEntry(entryRecordToInsert)
-            val actualEntryEntity: List<Entry> = emptyList()
-//            val actualEntryEntity: List<Entry> = entryRepository.getAllEntries()
+            // keep here in order to intentionally fail the test for e.g. testing of CI pipeline
+            // val actualEntryEntity: List<Entry> = emptyList()
+            val actualEntryEntity: List<Entry> = entryRepository.getAllEntries()
 
             // then
             assertEquals(listOf(entryRecordToInsert), actualEntryEntity)
