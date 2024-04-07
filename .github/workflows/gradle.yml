@@ -51,7 +51,7 @@ jobs:
       #      this will run ios target tests in case the os is macos and target is iosEmulator
       #      but it will run ./gradlew build in case of os ubuntu and target is android
       if: matrix.os == 'macos-latest' && matrix.target == 'iosSimulatorArm64Test'
-      run: ./gradlew iosSimulatorArm64Test
+      run: ./gradlew iosX64Test
 
       # run xcode build
     - name: Xcodebuild Action
