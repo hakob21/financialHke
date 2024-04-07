@@ -40,25 +40,37 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
-    # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
+      # run xcode build
+    - name: Xcodebuild Action
+      if: matrix.os == 'macos-latest' && matrix.target == 'iosSimulatorArm64Test'
+      uses: sersoft-gmbh/xcodebuild-action@v3.2.0
+      with:
+        project: iosApp/iosApp.xcodeproj
+        scheme: iosApp
+        destination: platform=iOS Simulator,name=iPhone 14 Pro Max
+        action: build
+
+      # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
+      # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
-    - name: Build with Gradle Wrapper
-#      this will run ios target tests in case the os is macos and target is iosEmulator
-#      but it will run ./gradlew build in case of os ubuntu and target is android
+    - name: Run gradlew build
+      if: matrix.os == 'ubuntu-latest' && matrix.target == 'testDebugUnitTest'
       run: |
-        if [ "${{ matrix.target }}" = "iosSimulatorArm64Test" ]; then
-          # Add the command for iosSimulatorArm64Test
-          echo "Running iosSimulatorArm64Test build"
-          # Your command here
-          ./gradlew iosSimulatorArm64Test 
-        elif [ "${{ matrix.target }}" = "testDebugUnitTest" ]; then
-          # Add the command for testDebugUnitTest
-          echo "Running testDebugUnitTest build"
-          ./gradlew build
-        fi
+        # Gradle build command
+        ./gradlew build
+
+#    - name: Build with Gradle Wrapper
+##      this will run ios target tests in case the os is macos and target is iosEmulator
+##      but it will run ./gradlew build in case of os ubuntu and target is android
+#      run: ./gradlew build
+
+    - name: Run iOS tests
+      #      this will run ios target tests in case the os is macos and target is iosEmulator
+      #      but it will run ./gradlew build in case of os ubuntu and target is android
+      if: matrix.os == 'macos-latest' && matrix.target == 'iosSimulatorArm64Test'
+      run: ./gradlew iosSimulatorArm64Test
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
