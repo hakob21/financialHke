@@ -1,6 +1,6 @@
 package com.hakob.financialhke
 
-import EntryRepository
+import com.hakob.financialhke.db.repository.EntryRepository
 import com.hakob.financialhke.domain.Entry
 import io.mockative.Mock
 import io.mockative.classOf

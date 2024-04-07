@@ -1,6 +1,6 @@
 package com.hakob.financialhke
 
-import EntryRepository
+import com.hakob.financialhke.db.repository.EntryRepository
 import com.hakob.financialhke.domain.Entry
 
 class Greeting(

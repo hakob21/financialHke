@@ -1,8 +1,8 @@
 package com.hakob.financialhke
 
-import EntryRepository
+import com.hakob.financialhke.db.repository.EntryRepository
 import com.hakob.financialhke.database.EntryQueries
-import com.hakob.financialhke.db.SqlDelightEntryRepository
+import com.hakob.financialhke.db.repositoryimpl.SqlDelightEntryRepository
 import com.hakob.financialhke.domain.Entry
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest

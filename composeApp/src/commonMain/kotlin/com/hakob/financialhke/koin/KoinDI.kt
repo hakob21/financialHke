@@ -1,9 +1,9 @@
 package com.hakob.financialhke.koin
 
-import EntryRepository
+import com.hakob.financialhke.db.repository.EntryRepository
 import com.hakob.financialhke.Greeting
 import com.hakob.financialhke.database.EntryQueries
-import com.hakob.financialhke.db.SqlDelightEntryRepository
+import com.hakob.financialhke.db.repositoryimpl.SqlDelightEntryRepository
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module

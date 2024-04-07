@@ -1,6 +1,6 @@
-package com.hakob.financialhke.db
+package com.hakob.financialhke.db.repositoryimpl
 
-import EntryRepository
+import com.hakob.financialhke.db.repository.EntryRepository
 import com.hakob.financialhke.database.EntryEntity
 import com.hakob.financialhke.database.EntryQueries
 import com.hakob.financialhke.domain.Entry
