@@ -16,6 +16,7 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false # Setting fail-fast to false to allow other jobs to continue even if one fails
       matrix:
         include:
           - target: iosSimulatorArm64Test
@@ -39,6 +40,12 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+
+    - name: Run iOS tests
+      #      this will run ios target tests in case the os is macos and target is iosEmulator
+      #      but it will run ./gradlew build in case of os ubuntu and target is android
+      if: matrix.os == 'macos-latest' && matrix.target == 'iosSimulatorArm64Test'
+      run: ./gradlew iosSimulatorArm64Test
 
       # run xcode build
     - name: Xcodebuild Action
@@ -65,12 +72,6 @@ jobs:
 ##      this will run ios target tests in case the os is macos and target is iosEmulator
 ##      but it will run ./gradlew build in case of os ubuntu and target is android
 #      run: ./gradlew build
-
-    - name: Run iOS tests
-      #      this will run ios target tests in case the os is macos and target is iosEmulator
-      #      but it will run ./gradlew build in case of os ubuntu and target is android
-      if: matrix.os == 'macos-latest' && matrix.target == 'iosSimulatorArm64Test'
-      run: ./gradlew iosSimulatorArm64Test
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
