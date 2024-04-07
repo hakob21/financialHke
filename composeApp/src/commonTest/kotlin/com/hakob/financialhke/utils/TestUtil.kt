@@ -1,4 +1,4 @@
-package com.hakob.financialhke
+package com.hakob.financialhke.utils
 
 import app.cash.sqldelight.db.SqlDriver
 

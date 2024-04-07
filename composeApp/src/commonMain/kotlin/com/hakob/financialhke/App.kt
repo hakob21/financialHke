@@ -32,7 +32,6 @@ fun App() {
 @Preview
 fun AppContent(
     greeting: Greeting = koinInject()
-
 ) {
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }

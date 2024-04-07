@@ -12,11 +12,6 @@ actual class DriverFactory(private val context: Context) {
     }
 }
 
-actual fun createDatabaseHke(): Database {
-
-    return Database(AndroidSqliteDriver(Database.Schema, getContextHke(), "test.db"))
-}
-
 // this uses android-startup library to get the applicationContext for android
 fun getContextHke(): Context {
     return applicationContext
