@@ -1,4 +1,4 @@
-package com.hakob.financialhke.annotation
+package com.hakob.financialhke.utils.annotation
 
 @Retention(AnnotationRetention.SOURCE)
 @Target(AnnotationTarget.CLASS)
