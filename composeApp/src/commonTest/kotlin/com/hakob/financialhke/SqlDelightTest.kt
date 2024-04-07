@@ -1,8 +1,8 @@
 package com.hakob.financialhke
 
-import EntryDataSource
+import EntryRepository
 import com.hakob.financialhke.database.EntryQueries
-import com.hakob.financialhke.db.SqlDelightEntryDataSource
+import com.hakob.financialhke.db.SqlDelightEntryRepository
 import com.hakob.financialhke.domain.Entry
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
@@ -11,7 +11,7 @@ import kotlin.test.assertEquals
 
 class SqlDelightTest {
 
-    private lateinit var dbHelper: EntryDataSource
+    private lateinit var dbHelper: EntryRepository
 
 //    private suspend fun DatabaseHelper.insertBreed(name: String) {
 //        insertBreeds(listOf(name))
@@ -20,7 +20,7 @@ class SqlDelightTest {
     @BeforeTest
     fun setup() = runTest {
         dbHelper =
-            SqlDelightEntryDataSource(
+            SqlDelightEntryRepository(
                 EntryQueries(
                     sqlDriverForTesting()
                 )

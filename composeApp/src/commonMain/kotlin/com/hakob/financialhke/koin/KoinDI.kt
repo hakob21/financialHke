@@ -1,9 +1,9 @@
 package com.hakob.financialhke.koin
 
-import EntryDataSource
+import EntryRepository
 import com.hakob.financialhke.Greeting
 import com.hakob.financialhke.database.EntryQueries
-import com.hakob.financialhke.db.SqlDelightEntryDataSource
+import com.hakob.financialhke.db.SqlDelightEntryRepository
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -41,7 +41,7 @@ fun coreModule() = module {
         )
     }
     single {
-        SqlDelightEntryDataSource(
+        SqlDelightEntryRepository(
             get(),
         )
     }
@@ -52,8 +52,8 @@ fun coreModule() = module {
         )
     }
 
-    single<EntryDataSource> {
-        SqlDelightEntryDataSource(
+    single<EntryRepository> {
+        SqlDelightEntryRepository(
             get()
         )
     }

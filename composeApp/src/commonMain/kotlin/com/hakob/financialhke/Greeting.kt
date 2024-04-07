@@ -1,10 +1,10 @@
 package com.hakob.financialhke
 
-import EntryDataSource
+import EntryRepository
 import com.hakob.financialhke.domain.Entry
 
 class Greeting(
-    val entryDataSource: EntryDataSource,
+    val entryRepository: EntryRepository,
 ) {
     private val platform = getPlatform()
 
@@ -19,7 +19,7 @@ class Greeting(
         // because the primary key id is already present in the DB.
         // can change the ID and run again every time
         val entry = Entry(2, 2.0)
-        entryDataSource.insertEntry(entry)
-        check(entryDataSource.getAllEntries().contains(entry))
+        entryRepository.insertEntry(entry)
+        check(entryRepository.getAllEntries().contains(entry))
     }
 }

@@ -1,6 +1,6 @@
 import com.hakob.financialhke.domain.Entry
 
-interface EntryDataSource {
+interface EntryRepository {
     fun insertEntry(entry: Entry)
     fun getAllEntries(): List<Entry>
 }

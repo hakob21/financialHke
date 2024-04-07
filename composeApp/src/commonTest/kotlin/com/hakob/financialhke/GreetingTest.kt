@@ -1,6 +1,6 @@
 package com.hakob.financialhke
 
-import EntryDataSource
+import EntryRepository
 import com.hakob.financialhke.domain.Entry
 import io.mockative.Mock
 import io.mockative.classOf
@@ -30,9 +30,9 @@ import kotlin.test.assertEquals
 class GreetingTest {
 
     @Mock
-    private val entryDataSource: EntryDataSource = mock(classOf<EntryDataSource>())
+    private val entryRepository: EntryRepository = mock(classOf<EntryRepository>())
 
-    private val greeting: Greeting = Greeting(entryDataSource)
+    private val greeting: Greeting = Greeting(entryRepository)
 
     @AfterTest
     fun tearDown() {
@@ -41,8 +41,8 @@ class GreetingTest {
     @Test
     fun greet() {
         val expected = listOf(Entry(1, 1.1))
-        every { entryDataSource.getAllEntries() }.returns(listOf(Entry(1, 1.1)))
-        val actual = entryDataSource.getAllEntries()
+        every { entryRepository.getAllEntries() }.returns(listOf(Entry(1, 1.1)))
+        val actual = entryRepository.getAllEntries()
 
         assertEquals(expected, actual)
 //        Assertion().assertEquals(greeting.greet(), "Hello, Android!")

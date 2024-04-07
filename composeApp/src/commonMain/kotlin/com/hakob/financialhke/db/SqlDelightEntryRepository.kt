@@ -1,13 +1,13 @@
 package com.hakob.financialhke.db
 
-import EntryDataSource
+import EntryRepository
 import com.hakob.financialhke.database.EntryEntity
 import com.hakob.financialhke.database.EntryQueries
 import com.hakob.financialhke.domain.Entry
 
-class SqlDelightEntryDataSource(
+class SqlDelightEntryRepository(
     private val queries: EntryQueries
-) : EntryDataSource {
+) : EntryRepository {
 
     override fun insertEntry(entry: Entry) {
         queries.insertEntry(entry.id.toLong(), entry.sum)
