@@ -1,4 +1,4 @@
-package com.hakob.financialhke
+package com.hakob.financialhke.sqldelight
 
 import com.hakob.financialhke.db.repository.EntryRepository
 import com.hakob.financialhke.database.EntryQueries
@@ -10,7 +10,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class SqlDelightTest {
+class SqlDelightGeneralTest {
 
     private lateinit var entryRepository: EntryRepository
 
@@ -32,7 +32,8 @@ class SqlDelightTest {
 
             // when
             entryRepository.insertEntry(entryRecordToInsert)
-            val actualEntryEntity: List<Entry> = entryRepository.getAllEntries()
+            val actualEntryEntity: List<Entry> = emptyList()
+//            val actualEntryEntity: List<Entry> = entryRepository.getAllEntries()
 
             // then
             assertEquals(listOf(entryRecordToInsert), actualEntryEntity)
