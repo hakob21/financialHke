@@ -2,8 +2,6 @@ package com.hakob.financialhke.koin
 
 import com.hakob.financialhke.db.repository.EntryRepository
 import com.hakob.financialhke.Greeting
-import com.hakob.financialhke.database.EntryQueries
-import com.hakob.financialhke.db.repositoryimpl.SqlDelightEntryRepository
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -35,28 +33,28 @@ fun initKoin(appModule: Module): KoinApplication {
 expect val platformModule: Module
 
 fun coreModule() = module {
-    single {
-        EntryQueries(
-            get(),
-        )
-    }
-    single {
-        SqlDelightEntryRepository(
-            get(),
-        )
-    }
+//    single {
+//        EntryQueries(
+//            get(),
+//        )
+//    }
+//    single {
+//        SqlDelightEntryRepository(
+//            get(),
+//        )
+//    }
 
-    single {
-        Greeting(
-            get()
-        )
-    }
+//    single {
+//        Greeting(
+//            get()
+//        )
+//    }
 
-    single<EntryRepository> {
-        SqlDelightEntryRepository(
-            get()
-        )
-    }
+//    single<EntryRepository> {
+//        SqlDelightEntryRepository(
+//            get()
+//        )
+//    }
 //    single<DogApi> {
 //        DogApiImpl(
 //            getWith("DogApiImpl"),
