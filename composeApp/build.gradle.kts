@@ -8,6 +8,7 @@ plugins {
     id("app.cash.sqldelight") version "2.0.1"
     id("com.google.devtools.ksp") version "1.9.23-1.0.19" // for mockative https://github.com/mockative/mockative
     kotlin("plugin.allopen") version "1.9.23" // for mockative https://github.com/mockative/mockative. All-open compiler plugin https://kotlinlang.org/docs/all-open-plugin.html
+    id("io.realm.kotlin") version "1.13.0"
 }
 
 // for mockative https://github.com/mockative/mockative
@@ -102,6 +103,9 @@ kotlin {
             implementation("io.insert-koin:koin-core")
             implementation("io.insert-koin:koin-compose")
 
+            implementation("io.realm.kotlin:library-base:1.13.0")
+//            implementation("io.realm.kotlin:library-sync:1.13.0") // If using Device Sync
+//            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0") // If using coroutines with the SDK
         }
         commonTest.dependencies {
             implementation("org.jetbrains.kotlin:kotlin-test:1.9.22") // version should be same as Kotlin version of the project. this dep adds @BeforeTest annotations and such. also @Test annotation
