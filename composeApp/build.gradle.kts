@@ -24,7 +24,12 @@ kotlin {
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "11"
+                // TODO: figure out is this the jvm bytecode version? or does this compile JDK 17
+                //  code but can be interpreted by a lower/higher JRE as well? How does the whole shit work?
+                // updated because the https://developer.android.com/jetpack/androidx/releases/compose-kotlin
+                // mentioned jvmTarget 19, but with 19 it didn't work because android sdk seems to not support 19
+                // however why tf it says 19 in the link then?
+                jvmTarget = "17"
             }
         }
     }
@@ -111,6 +116,17 @@ android {
     sourceSets["main"].res.srcDirs("src/androidMain/res")
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
+    // needed for @Preview annotation to work with Android Studio
+    buildFeatures {
+        compose = true
+    }
+    // needed for @Preview annotation to work with Android Studio: more specifically for JetPack Compose compatibility with Kotlin
+    // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.11"
+    }
+
+
     defaultConfig {
         applicationId = "org.hakob.financialhke"
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -129,8 +145,10 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        // updated because the https://developer.android.com/jetpack/androidx/releases/compose-kotlin mentioned jvmTarget 19, but with 19 it didn't work because android sdk seems to not support 19
+        // however why tf it says 19 in the link then?
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
@@ -139,6 +157,13 @@ android {
     }
 }
 dependencies {
+    // not sure if needed for @Preview to work. not sure if it needs to be in androidMain
+    // copied from the original Android Studio project template when you crate a KMP project
+    implementation(libs.compose.material3)
+    // below 3 libs needed for @Preview to work
+    implementation(libs.compose.ui.tooling.preview)
+    implementation(platform("androidx.compose:compose-bom:2024.04.00"))
+    debugImplementation("androidx.compose.ui:ui-tooling")
     testImplementation("org.testng:testng:6.9.6")
     // koin
     implementation(platform("io.insert-koin:koin-bom:3.5.3"))
