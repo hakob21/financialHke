@@ -1,7 +1,10 @@
 package com.hakob.financialhke.realmpoc
 
+import com.hakob.financialhke.db.repository.ExpenseRepositoryInterface
 import com.hakob.financialhke.db.repositoryimpl.ExpenseRepository
 import com.hakob.financialhke.domain.Expense
+import io.realm.kotlin.Realm
+import io.realm.kotlin.RealmConfiguration
 import com.hakob.financialhke.db.repodomain.Expense as RealmExpense
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
@@ -9,12 +12,16 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class RealmPocTest {
-    private lateinit var expenseRepository: ExpenseRepository
+    private lateinit var expenseRepositoryInterface: ExpenseRepositoryInterface
 
     @BeforeTest
     fun setup() = runTest {
-        expenseRepository = ExpenseRepository()
-        expenseRepository.deleteAll()
+
+        val configuration = RealmConfiguration.create(schema = setOf(RealmExpense::class))
+        val realm = Realm.open(configuration)
+
+        expenseRepositoryInterface = ExpenseRepository(realm)
+        expenseRepositoryInterface.deleteAll()
     }
 
     @Test
@@ -24,8 +31,8 @@ class RealmPocTest {
             val expenseToInsert = Expense(sum = 1.0)
 
             // when
-            expenseRepository.addExpense(expenseToInsert)
-            val actualExpenses: List<Expense> = expenseRepository.expenses()
+            expenseRepositoryInterface.addExpense(expenseToInsert)
+            val actualExpenses: List<Expense> = expenseRepositoryInterface.expenses()
 
             // then
             assertEquals(listOf(expenseToInsert), actualExpenses)
