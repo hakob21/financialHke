@@ -1,7 +1,9 @@
 package com.hakob.financialhke
 
-import com.hakob.financialhke.db.repository.EntryRepository
+import com.hakob.financialhke.db.repository.ExpenseRepositoryInterface
+import com.hakob.financialhke.db.repositoryimpl.ExpenseRepository
 import com.hakob.financialhke.domain.Entry
+import com.hakob.financialhke.domain.Expense
 import io.mockative.Mock
 import io.mockative.classOf
 import io.mockative.every
@@ -30,9 +32,9 @@ import kotlin.test.assertEquals
 class GreetingTest {
 
     @Mock
-    private val entryRepository: EntryRepository = mock(classOf<EntryRepository>())
+    private val expenseRepository: ExpenseRepositoryInterface = mock(classOf<ExpenseRepositoryInterface>())
 
-    private val greeting: Greeting = Greeting(entryRepository)
+    private val greeting: Greeting = Greeting(expenseRepository)
 
     @AfterTest
     fun tearDown() {
@@ -40,9 +42,9 @@ class GreetingTest {
 
     @Test
     fun greet() {
-        val expected = listOf(Entry(1, 1.1))
-        every { entryRepository.getAllEntries() }.returns(listOf(Entry(1, 1.1)))
-        val actual = entryRepository.getAllEntries()
+        val expected = listOf(Expense(sum = 3.0))
+        every { expenseRepository.expenses() }.returns(listOf(Expense(sum = 3.0)))
+        val actual = expenseRepository.expenses()
 
         assertEquals(expected, actual)
 //        Assertion().assertEquals(greeting.greet(), "Hello, Android!")

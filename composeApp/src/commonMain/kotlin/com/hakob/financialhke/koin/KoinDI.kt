@@ -2,6 +2,12 @@ package com.hakob.financialhke.koin
 
 import com.hakob.financialhke.db.repository.EntryRepository
 import com.hakob.financialhke.Greeting
+import com.hakob.financialhke.db.repodomain.Expense
+import com.hakob.financialhke.db.repository.ExpenseRepositoryInterface
+import com.hakob.financialhke.db.repositoryimpl.ExpenseRepository
+import io.realm.kotlin.Configuration
+import io.realm.kotlin.Realm
+import io.realm.kotlin.RealmConfiguration
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -44,11 +50,11 @@ fun coreModule() = module {
 //        )
 //    }
 
-//    single {
-//        Greeting(
-//            get()
-//        )
-//    }
+    single {
+        Greeting(
+            get()
+        )
+    }
 
 //    single<EntryRepository> {
 //        SqlDelightEntryRepository(
@@ -61,5 +67,25 @@ fun coreModule() = module {
 //            get()
 //        )
 //    }
+
+
+    single<ExpenseRepositoryInterface> { ExpenseRepository(get()) }
+
+    single { Realm.open(get()) }
+
+    single<Configuration> {
+        RealmConfiguration.Builder(
+            schema = setOf(
+                Expense::class
+            )
+        ).schemaVersion(1).build()
+    }
+
+//    single { UsersDb(get()) }
+//    single { ReportsDb(get()) }
+
+//    val configuration = RealmConfiguration.create(schema = setOf(Expense::class))
+//    Realm.open(configuration)
+
 }
 
