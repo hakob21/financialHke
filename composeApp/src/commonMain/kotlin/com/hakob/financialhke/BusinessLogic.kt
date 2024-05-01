@@ -5,10 +5,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import com.hakob.financialhke.composables.ExpenseComposable
 import com.hakob.financialhke.db.repository.ExpenseRepositoryInterface
+import com.hakob.financialhke.domain.Budget
 import com.hakob.financialhke.domain.Expense
 
 class BusinessLogic(
-//    val entryRepository: EntryRepository,
     val expenseRepository: ExpenseRepositoryInterface
 ) {
     private val platform = getPlatform()
@@ -46,5 +46,9 @@ class BusinessLogic(
     }
     fun getAllExpenses(): List<Expense> {
         return expenseRepository.expenses()
+    }
+
+    fun setBudget(budget: Budget): Budget {
+        return expenseRepository.setBudget(budget)
     }
 }
