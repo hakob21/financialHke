@@ -1,8 +1,6 @@
 package com.hakob.financialhke
 
 import com.hakob.financialhke.db.repository.ExpenseRepositoryInterface
-import com.hakob.financialhke.db.repositoryimpl.ExpenseRepository
-import com.hakob.financialhke.domain.Entry
 import com.hakob.financialhke.domain.Expense
 import io.mockative.Mock
 import io.mockative.classOf
@@ -34,7 +32,7 @@ class GreetingTest {
     @Mock
     private val expenseRepository: ExpenseRepositoryInterface = mock(classOf<ExpenseRepositoryInterface>())
 
-    private val greeting: Greeting = Greeting(expenseRepository)
+    private val businessLogic: BusinessLogic = BusinessLogic(expenseRepository)
 
     @AfterTest
     fun tearDown() {

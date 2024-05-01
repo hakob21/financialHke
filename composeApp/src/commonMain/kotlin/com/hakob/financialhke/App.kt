@@ -1,29 +1,18 @@
 package com.hakob.financialhke
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import com.hakob.financialhke.domain.Expense
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-import financialhke.composeapp.generated.resources.Res
-import financialhke.composeapp.generated.resources.compose_multiplatform
 import org.koin.compose.KoinContext
 import org.koin.compose.koinInject
 
@@ -39,7 +28,7 @@ fun App() {
 @Composable
 @Preview
 fun AppContent(
-    greeting: Greeting = koinInject()
+    businessLogic: BusinessLogic = koinInject()
 ) {
     var text by remember { mutableStateOf("") }
 
@@ -59,10 +48,10 @@ fun AppContent(
 //                    },
                     onDone = {
                         val result: Result<Unit> = runCatching {
-                            greeting.enterExpense(Expense(text.toDouble()))
+                            businessLogic.enterExpense(Expense(text.toDouble()))
                         }
                         println("HKEEE DONE TAPPED")
-                        println("All expenses: ${greeting.getAllExpenses()}")
+                        println("All expenses: ${businessLogic.getAllExpenses()}")
 
                     }
                 )

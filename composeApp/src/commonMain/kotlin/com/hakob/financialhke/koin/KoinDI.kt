@@ -1,7 +1,6 @@
 package com.hakob.financialhke.koin
 
-import com.hakob.financialhke.db.repository.EntryRepository
-import com.hakob.financialhke.Greeting
+import com.hakob.financialhke.BusinessLogic
 import com.hakob.financialhke.db.repodomain.Expense
 import com.hakob.financialhke.db.repository.ExpenseRepositoryInterface
 import com.hakob.financialhke.db.repositoryimpl.ExpenseRepository
@@ -51,7 +50,7 @@ fun coreModule() = module {
 //    }
 
     single {
-        Greeting(
+        BusinessLogic(
             get()
         )
     }

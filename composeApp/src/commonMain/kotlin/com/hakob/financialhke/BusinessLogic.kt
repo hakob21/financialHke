@@ -4,13 +4,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import com.hakob.financialhke.composables.ExpenseComposable
-import com.hakob.financialhke.db.repository.EntryRepository
 import com.hakob.financialhke.db.repository.ExpenseRepositoryInterface
-import com.hakob.financialhke.db.repositoryimpl.ExpenseRepository
-import com.hakob.financialhke.domain.Entry
 import com.hakob.financialhke.domain.Expense
 
-class Greeting(
+class BusinessLogic(
 //    val entryRepository: EntryRepository,
     val expenseRepository: ExpenseRepositoryInterface
 ) {
