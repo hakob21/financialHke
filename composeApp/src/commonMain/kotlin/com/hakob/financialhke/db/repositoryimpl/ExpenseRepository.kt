@@ -7,11 +7,11 @@ import io.realm.kotlin.RealmConfiguration
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.query.RealmQuery
 
-class ExpenseRepository {
-    val realm: Realm by lazy {
-        val configuration = RealmConfiguration.create(schema = setOf(RealmExpense::class))
-        Realm.open(configuration)
-    }
+class ExpenseRepository(private val realm: Realm) {
+//    val realm: Realm by lazy {
+//        val configuration = RealmConfiguration.create(schema = setOf(RealmExpense::class))
+//        Realm.open(configuration)
+//    }
 
     fun addExpense(expense: Expense): Expense {
         return realm.writeBlocking {

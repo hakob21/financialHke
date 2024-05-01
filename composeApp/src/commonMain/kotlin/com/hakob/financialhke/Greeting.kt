@@ -1,15 +1,31 @@
 package com.hakob.financialhke
 
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.Composable
+import com.hakob.financialhke.composables.ExpenseComposable
 import com.hakob.financialhke.db.repository.EntryRepository
+import com.hakob.financialhke.db.repositoryimpl.ExpenseRepository
 import com.hakob.financialhke.domain.Entry
+import com.hakob.financialhke.domain.Expense
 
 class Greeting(
-    val entryRepository: EntryRepository,
+//    val entryRepository: EntryRepository,
+    val expenseRepository: ExpenseRepository
 ) {
     private val platform = getPlatform()
 
+    @Composable
     fun greet(): String {
         doDbThings()
+        LazyColumn() {
+            items(
+//                count = expenseRepository.expenses().size,
+                items = expenseRepository.expenses()
+            ) {
+                expense -> ExpenseComposable(expense)
+            }
+        }
         return "Hello, ${platform.name}!"
     }
 
@@ -18,8 +34,12 @@ class Greeting(
         // inserted in the DB, but next runs it fails
         // because the primary key id is already present in the DB.
         // can change the ID and run again every time
-        val entry = Entry(2, 2.0)
-        entryRepository.insertEntry(entry)
-        check(entryRepository.getAllEntries().contains(entry))
+        val entry = Expense(3.3)
+        expenseRepository.addExpense(entry)
+        check(expenseRepository.expenses().contains(entry))
+        println("Hkeeeee expenses ${expenseRepository.expenses()}")
+        // uncomment these two lines to clear database
+//        expenseRepository.deleteAll()
+//        check(expenseRepository.expenses().isEmpty())
     }
 }
