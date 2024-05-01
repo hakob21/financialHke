@@ -3,6 +3,7 @@ package com.hakob.financialhke.koin
 import com.hakob.financialhke.db.repository.EntryRepository
 import com.hakob.financialhke.Greeting
 import com.hakob.financialhke.db.repodomain.Expense
+import com.hakob.financialhke.db.repository.ExpenseRepositoryInterface
 import com.hakob.financialhke.db.repositoryimpl.ExpenseRepository
 import io.realm.kotlin.Configuration
 import io.realm.kotlin.Realm
@@ -68,7 +69,7 @@ fun coreModule() = module {
 //    }
 
 
-    single { ExpenseRepository(get()) }
+    single<ExpenseRepositoryInterface> { ExpenseRepository(get()) }
 
     single { Realm.open(get()) }
 
