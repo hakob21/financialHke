@@ -43,4 +43,11 @@ class Greeting(
 //        expenseRepository.deleteAll()
 //        check(expenseRepository.expenses().isEmpty())
     }
+
+    fun enterExpense(expense: Expense) {
+        expenseRepository.addExpense(expense)
+    }
+    fun getAllExpenses(): List<Expense> {
+        return expenseRepository.expenses()
+    }
 }
