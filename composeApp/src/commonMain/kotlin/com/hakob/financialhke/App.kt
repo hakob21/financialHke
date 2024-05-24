@@ -44,7 +44,7 @@ fun AppContent(
                 singleLine = true,
 //                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                label = { Text("Expense") },
+                label = { Text("HkeExpense") },
                 keyboardActions = KeyboardActions(
 //                    onAny = {
 //                        println("HKEEE DONE TAPPED")

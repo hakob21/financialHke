@@ -105,6 +105,11 @@ kotlin {
             implementation("org.jetbrains.kotlin:kotlin-test:1.9.22") // version should be same as Kotlin version of the project. this dep adds @BeforeTest annotations and such. also @Test annotation
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
             implementation("io.mockative:mockative:2.1.0") // for mocking https://github.com/mockative/mockative
+
+
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
+
         }
     }
 }
@@ -134,6 +139,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     packaging {
         resources {
@@ -153,6 +159,9 @@ android {
     }
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
+        androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.6.2") // keeep the version the same as in TOML's compose
+        debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.2") // keeep the version the same as in TOML's compose
+
         // todo: maybe it needs to be here, not below
 //        testImplementation("org.testng:testng:6.9.6")
     }
@@ -178,6 +187,10 @@ dependencies {
     // Koin for JUnit 5
     testImplementation("io.insert-koin:koin-test-junit5")
     testImplementation("org.testng:testng:6.9.6")
+
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.6.2") // keeep the version the same as in TOML's compose
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.2") // keeep the version the same as in TOML's compose
+
 
     // for Mockative https://github.com/mockative/mockative
     configurations
