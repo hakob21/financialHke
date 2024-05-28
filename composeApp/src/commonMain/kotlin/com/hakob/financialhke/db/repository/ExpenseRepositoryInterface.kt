@@ -7,6 +7,7 @@ import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.query.RealmQuery
+import kotlinx.datetime.LocalDateTime
 
 interface ExpenseRepositoryInterface {
 //    val realm: Realm by lazy {
@@ -20,5 +21,8 @@ interface ExpenseRepositoryInterface {
 
     fun expenses(): List<Expense>
 
-    fun deleteAll()
+    fun deleteAllExpenses()
+
+    fun getCurrentBudget(localDateTime: LocalDateTime): Budget
+    fun deleteAllBudgets()
 }

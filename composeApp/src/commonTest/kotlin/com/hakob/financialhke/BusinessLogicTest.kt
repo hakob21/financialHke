@@ -11,6 +11,8 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.test.AfterTest
@@ -47,7 +49,7 @@ class BusinessLogicTest {
 
     // business logic layer test
     @Test
-    fun `should add expense to the db and subtract from the whole budget`() {
+    fun `should set the budget`() {
 //        val instantNow: Instant = Clock.System.now()
 //        instantNow.toString()  // returns something like 2015-12-31T12:30:00Z
         // hke how can we parse and convert
@@ -57,7 +59,7 @@ class BusinessLogicTest {
 
         // given
         val now: Instant = Clock.System.now()
-        val today: LocalDate = now.toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val today: LocalDateTime = now.toLocalDateTime(TimeZone.currentSystemDefault())
 // or shorter
 //        val today: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
 

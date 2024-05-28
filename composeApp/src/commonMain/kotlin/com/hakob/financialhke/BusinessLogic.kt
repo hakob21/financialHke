@@ -7,6 +7,10 @@ import com.hakob.financialhke.composables.ExpenseComposable
 import com.hakob.financialhke.db.repository.ExpenseRepositoryInterface
 import com.hakob.financialhke.domain.Budget
 import com.hakob.financialhke.domain.Expense
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 class BusinessLogic(
     val expenseRepository: ExpenseRepositoryInterface
@@ -41,14 +45,27 @@ class BusinessLogic(
 //        check(expenseRepository.expenses().isEmpty())
     }
 
-    fun enterExpense(expense: Expense) {
-        expenseRepository.addExpense(expense)
+    fun enterExpense(expense: Expense): Expense {
+        return expenseRepository.addExpense(expense)
     }
     fun getAllExpenses(): List<Expense> {
         return expenseRepository.expenses()
     }
 
+    fun getCurrentBudget(): Budget {
+        val currentLocalDateTime: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+
+        return expenseRepository.getCurrentBudget(currentLocalDateTime)
+    }
+
     fun setBudget(budget: Budget): Budget {
-        return expenseRepository.setBudget(budget)
+        // extract Clock or Clock.System to a variable of this class, so that it can be injected from the test and in test always return the same value
+        // at work codebase we have such providers
+        val currentLocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        if(budget.localDate.compareTo(currentLocalDateTime) == 1) {
+            return expenseRepository.setBudget(budget)
+        } else {
+            throw RuntimeException("The time set in the budget is earlier than current localDateTime ")
+        }
     }
 }

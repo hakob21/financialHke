@@ -1,8 +1,8 @@
 package com.hakob.financialhke.domain
 
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 
 data class Budget(
     val sum: Double,
-    val localDate: LocalDate,
+    val localDate: LocalDateTime,
 )

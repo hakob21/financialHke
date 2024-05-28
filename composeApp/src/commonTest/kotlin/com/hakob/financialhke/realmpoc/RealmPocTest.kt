@@ -21,7 +21,7 @@ class RealmPocTest {
         val realm = Realm.open(configuration)
 
         expenseRepositoryInterface = ExpenseRepository(realm)
-        expenseRepositoryInterface.deleteAll()
+        expenseRepositoryInterface.deleteAllExpenses()
     }
 
     @Test

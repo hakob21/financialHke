@@ -100,11 +100,14 @@ kotlin {
 //            implementation("io.realm.kotlin:library-sync:1.13.0") // If using Device Sync
 //            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0") // If using coroutines with the SDK
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0-RC.2")
+            // Koin Test features
         }
         commonTest.dependencies {
             implementation("org.jetbrains.kotlin:kotlin-test:1.9.22") // version should be same as Kotlin version of the project. this dep adds @BeforeTest annotations and such. also @Test annotation
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
             implementation("io.mockative:mockative:2.1.0") // for mocking https://github.com/mockative/mockative
+            implementation("io.insert-koin:koin-test")
+
         }
     }
 }

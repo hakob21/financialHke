@@ -9,18 +9,47 @@ import com.hakob.financialhke.realmUtils.toRealmInstant
 import com.hakob.financialhke.db.repodomain.Expense as RealmExpense
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
+import io.realm.kotlin.internal.getIdentifierOrNull
 import io.realm.kotlin.query.RealmQuery
+import io.realm.kotlin.query.find
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
-class ExpenseRepository(private val realm: Realm) : ExpenseRepositoryInterface {
+class ExpenseRepository(val realm: Realm) : ExpenseRepositoryInterface {
 //    val realm: Realm by lazy {
 //        val configuration = RealmConfiguration.create(schema = setOf(RealmExpense::class))
 //        Realm.open(configuration)
 //    }
 
     override fun addExpense(expense: Expense): Expense {
+        val currentLocalDateTime: LocalDateTime =
+            Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val currentMonthBudget = getCurrentBudget(currentLocalDateTime)
+//        val updatedBudget = currentMonthBudget.copy(sum = currentMonthBudget.sum - expense.sum)
+        // updateBudget
+//        setBudget(updatedBudget)
+
+        realm.writeBlocking {
+            val frozenBudget = realm.query<RealmBudget>().find().first()
+            println("Hke frozenBudget ${frozenBudget}")
+            println("Hke frozenBudget id ${frozenBudget.getIdentifierOrNull()}")
+            val latest = findLatest(frozenBudget)
+            println("hke latest $latest")
+            findLatest(frozenBudget)?.let { liveBudget ->
+                // for some reason a block { } doesn't run. todo: figure out why
+//                {
+//                    println("hke liveBudget ${liveBudget.sum}")
+//                    println("hke expense ${expense.sum}")
+                    liveBudget.sum -= expense.sum
+//                }
+            }
+        }
+
+        println("hke getCurrentBudget ${getCurrentBudget(currentLocalDateTime)}")
         return realm.writeBlocking {
             copyToRealm(RealmExpense().apply { sum = expense.sum })
         }.toDomainExpense()
@@ -30,7 +59,9 @@ class ExpenseRepository(private val realm: Realm) : ExpenseRepositoryInterface {
         return realm.writeBlocking {
             copyToRealm(RealmBudget().apply {
                 sum = budget.sum
-                realmInstant = Instant.parse(budget.localDate.toString()).toRealmInstant()
+                // temporarily appending "Z" to the localDateTime property
+                realmInstant = Instant.parse(budget.localDate.toString() + "Z")
+                    .toRealmInstant() //toRealmInstant() will convert localTime to UTC
             })
         }.toDomainBudget()
 
@@ -41,9 +72,26 @@ class ExpenseRepository(private val realm: Realm) : ExpenseRepositoryInterface {
             .map { realmExpense -> realmExpense.toDomainExpense() }
     }
 
-    override fun deleteAll() {
+    override fun getCurrentBudget(localDateTime: LocalDateTime): Budget {
+        println("hke all budgets")
+        println(realm.query<RealmBudget>().find { it.forEach { println(it.sum) } })
+        println(realm.query<RealmBudget>().find { it.count() })
+        val instant = localDateTime.toInstant(TimeZone.UTC)
+        val realmInstant = instant.toRealmInstant()
+        return realm.query<RealmBudget>("realmInstant > $0", realmInstant).find().first()
+            .toDomainBudget()
+    }
+
+    override fun deleteAllExpenses() {
         realm.writeBlocking {
             val query: RealmQuery<RealmExpense> = this.query<RealmExpense>()
+            delete(query)
+        }
+    }
+
+    override fun deleteAllBudgets() {
+        realm.writeBlocking {
+            val query: RealmQuery<RealmBudget> = this.query<RealmBudget>()
             delete(query)
         }
     }
@@ -53,11 +101,23 @@ class ExpenseRepository(private val realm: Realm) : ExpenseRepositoryInterface {
             sum = this.sum
         )
 
-    fun RealmBudget.toDomainBudget() =
-        Budget(
-            sum = this.sum,
-            localDate = this.realmInstant.toInstant().toLocalDateTime(TimeZone.currentSystemDefault()).date,
+    fun RealmBudget.toDomainBudget(): Budget {
+        println("hke realmInstantToInstant ${this.realmInstant.toInstant()}")
+        println(
+            "hke realmInstantToInstant.toLocalDateTime ${
+                this.realmInstant.toInstant().toLocalDateTime(TimeZone.currentSystemDefault())
+            }"
         )
+        println(
+            "hke realmInstantToInstant.UTC ${
+                this.realmInstant.toInstant().toLocalDateTime(TimeZone.UTC)
+            }"
+        )
+        return Budget(
+            sum = this.sum,
+            localDate = this.realmInstant.toInstant().toLocalDateTime(TimeZone.UTC),
+        )
+    }
 }
 
 //class ExpressionRepository {
