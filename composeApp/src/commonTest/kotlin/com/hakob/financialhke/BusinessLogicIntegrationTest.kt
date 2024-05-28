@@ -1,9 +1,11 @@
 package com.hakob.financialhke
 
+import com.hakob.financialhke.codeUtils.ClockProvider
 import com.hakob.financialhke.db.repository.ExpenseRepositoryInterface
 import com.hakob.financialhke.domain.Budget
 import com.hakob.financialhke.domain.Expense
 import com.hakob.financialhke.koin.coreModule
+import com.hakob.financialhke.utils.annotation.testCodeUtils.AlwaysJuneFirstClockProvider
 import io.mockative.every
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -11,26 +13,39 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.Month
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
+import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class BusinessLogicIntegrationTest: KoinTest {
+class BusinessLogicIntegrationTest : KoinTest {
 
     private val expenseRepository: ExpenseRepositoryInterface by inject()
 
     private val businessLogic: BusinessLogic by inject()
 
-    @BeforeTest
+    @AfterTest
     fun tearDown() {
+        stopKoin()
+    }
+
+    @BeforeTest
+    fun setUp() {
         startKoin {
             modules(
-                coreModule()
+                coreModule().plus(
+                    // will override the ActulaClockProvider dependency
+                    module {
+                        single<ClockProvider> {
+                            AlwaysJuneFirstClockProvider()
+                        }
+                    }
+                )
 //                module {
 //                    single<ExpenseRepositoryInterface> { ExpenseRepository(get()) }
 //
@@ -64,13 +79,13 @@ class BusinessLogicIntegrationTest: KoinTest {
 
         // given
         val now: Instant = Clock.System.now()
-        val today: LocalDateTime = now.toLocalDateTime(TimeZone.currentSystemDefault())
+        val endLocalDateTime: LocalDateTime = LocalDateTime(LocalDate(2024, Month.JUNE, 26), LocalTime(23, 59, 59))
 // or shorter
 //        val today: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
 
         val budget = Budget(
             sum = 1000.0,
-            localDate = today
+            endLocalDateTime = endLocalDateTime
         )
 //        every { expenseRepository.setBudget(budget) }.returns(budget)
 
@@ -89,7 +104,7 @@ class BusinessLogicIntegrationTest: KoinTest {
 
         val budget = Budget(
             sum = 1000.0,
-            localDate = endOfJune
+            endLocalDateTime = endOfJune
         )
 
         // when
@@ -110,7 +125,7 @@ class BusinessLogicIntegrationTest: KoinTest {
 
         val budget = Budget(
             sum = 1000.0,
-            localDate = endOfJune
+            endLocalDateTime = endOfJune
         )
 
         // when
@@ -129,7 +144,7 @@ class BusinessLogicIntegrationTest: KoinTest {
         val endOfJune = LocalDateTime(LocalDate(2024, Month.JUNE, 26), LocalTime(23, 59, 59))
         val budget = Budget(
             sum = 1000.0,
-            localDate = endOfJune
+            endLocalDateTime = endOfJune
         )
         val actualBudget = businessLogic.setBudget(budget)
 
@@ -147,18 +162,99 @@ class BusinessLogicIntegrationTest: KoinTest {
         println("hke debug currentBudgetBeforeAddingExpense ${currentBudgetBeforeAddingExpense}")
         println("hke debug currentBudgetAfterAddingExpense ${currentBudgetAfterAddingExpense}")
         assertEquals(expected = expense, actual = actualAddedExpense)
-        assertEquals(expected = budget.sum - expense.sum, actual = currentBudgetAfterAddingExpense.sum)
+        assertEquals(
+            expected = budget.sum - expense.sum,
+            actual = currentBudgetAfterAddingExpense.sum
+        )
     }
 
-    // repo layer test
     @Test
-    fun greet() {
-        val expected = listOf(Expense(sum = 3.0))
-        every { expenseRepository.expenses() }.returns(listOf(Expense(sum = 3.0)))
+    fun `should get daily available amount`() {
+        // given
+        // set budget until end of june
+        val endOfJune = LocalDateTime(LocalDate(2024, Month.JUNE, 3), LocalTime(23, 59, 59))
+        val budget = Budget(
+            sum = 1000.0,
+            endLocalDateTime = endOfJune
+        )
+        val actualBudget = businessLogic.setBudget(budget)
 
-        val actual = expenseRepository.expenses()
+        // first test: should get correct daily available amount
+        val dailyAvailableAmountBeforeAddingExpense = businessLogic.getDailyAvailableAmount()
+        println("HKe dailyAvailableAmountBeforeAddingExpense ${dailyAvailableAmountBeforeAddingExpense}")
 
-        assertEquals(expected, actual)
-//        Assertion().assertEquals(greeting.greet(), "Hello, Android!")
+        // add expense
+        val expense = Expense(
+            sum = 200.0,
+        )
+
+        // when
+        val actualAddedExpense = businessLogic.enterExpense(expense)
+        val dailyAvailableAmountAfterAddingExpense = businessLogic.getDailyAvailableAmount()
+        println("HKe dailyAvailableAmountAfterAddingExpense ${dailyAvailableAmountAfterAddingExpense}")
+
+        // then
+        assertEquals(expected = expense, actual = actualAddedExpense)
+        assertEquals(expected = 333, actual = dailyAvailableAmountBeforeAddingExpense)
+        assertEquals(expected = 267, actual = dailyAvailableAmountAfterAddingExpense)
+    }
+
+    @Test
+    fun `testCase1`() {
+        val endLocalDateTime: LocalDateTime = LocalDateTime(LocalDate(2024, Month.JUNE, 26), LocalTime(23, 59, 59))
+        val budgetSum: Double = 550.0
+        val expectedDailyAvailableAmount: Int = 21
+        testCase(
+            endLocalDateTime,
+            budgetSum,
+            expectedDailyAvailableAmount,
+        )
+    }
+
+    // this scenario should actually write something like "less than 1 EUR daily"
+    @Test
+    fun `testCase2`() {
+        val endLocalDateTime: LocalDateTime = LocalDateTime(LocalDate(2024, Month.JUNE, 26), LocalTime(23, 59, 59))
+        val budgetSum: Double = 1.0
+        val expectedDailyAvailableAmount: Int = 0
+        testCase(
+            endLocalDateTime,
+            budgetSum,
+            expectedDailyAvailableAmount,
+        )
+    }
+
+    @Test
+    fun `testCase3 time part of the endLocalDateTime is earlier than NOW and should still consider this as 1 day of budget i e should ignore the time part and only calculate based on the days`() {
+        val endLocalDateTime: LocalDateTime = LocalDateTime(LocalDate(2024, Month.JUNE, 1), LocalTime(1, 59, 59))
+        val budgetSum: Double = 550.0
+        val expectedDailyAvailableAmount: Int = 550
+        testCase(
+            endLocalDateTime,
+            budgetSum,
+            expectedDailyAvailableAmount,
+        )
+    }
+
+    private fun testCase(
+        endLocalDateTime: LocalDateTime,
+        budgetSum: Double,
+        expectedDailyAvailableAmount: Int,
+    ) {
+        // given
+        // set budget
+        val budget = Budget(
+            sum = budgetSum,
+            endLocalDateTime = endLocalDateTime
+        )
+        val actualBudget = businessLogic.setBudget(budget)
+
+        // first test: should get correct daily available amount
+        val dailyAvailableAmount = businessLogic.getDailyAvailableAmount()
+        println("HKe dailyAvailableAmountBeforeAddingExpense ${dailyAvailableAmount}")
+
+        // then
+        assertEquals(expected = expectedDailyAvailableAmount, actual = dailyAvailableAmount)
+
     }
 }

@@ -3,16 +3,14 @@ package com.hakob.financialhke
 import com.hakob.financialhke.db.repository.ExpenseRepositoryInterface
 import com.hakob.financialhke.domain.Budget
 import com.hakob.financialhke.domain.Expense
+import com.hakob.financialhke.utils.annotation.testCodeUtils.AlwaysJuneFirstClockProvider
 import io.mockative.Mock
 import io.mockative.classOf
 import io.mockative.every
 import io.mockative.mock
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.LocalTime
-import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.test.AfterTest
@@ -41,7 +39,9 @@ class BusinessLogicTest {
     @Mock
     private val expenseRepository: ExpenseRepositoryInterface = mock(classOf<ExpenseRepositoryInterface>())
 
-    private val businessLogic: BusinessLogic = BusinessLogic(expenseRepository)
+    private val alwaysJuneFirstClockProvider: AlwaysJuneFirstClockProvider = AlwaysJuneFirstClockProvider()
+
+    private val businessLogic: BusinessLogic = BusinessLogic(expenseRepository, alwaysJuneFirstClockProvider)
 
     @AfterTest
     fun tearDown() {
@@ -65,7 +65,7 @@ class BusinessLogicTest {
 
         val budget = Budget(
             sum = 1000.0,
-            localDate = today
+            endLocalDateTime = today
         )
         every { expenseRepository.setBudget(budget) }.returns(budget)
 

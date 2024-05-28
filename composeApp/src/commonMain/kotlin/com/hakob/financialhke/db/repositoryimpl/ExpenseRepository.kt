@@ -15,6 +15,7 @@ import io.realm.kotlin.query.find
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
@@ -60,7 +61,7 @@ class ExpenseRepository(val realm: Realm) : ExpenseRepositoryInterface {
             copyToRealm(RealmBudget().apply {
                 sum = budget.sum
                 // temporarily appending "Z" to the localDateTime property
-                realmInstant = Instant.parse(budget.localDate.toString() + "Z")
+                realmInstant = Instant.parse(budget.endLocalDateTime.toString() + "Z")
                     .toRealmInstant() //toRealmInstant() will convert localTime to UTC
             })
         }.toDomainBudget()
@@ -76,9 +77,14 @@ class ExpenseRepository(val realm: Realm) : ExpenseRepositoryInterface {
         println("hke all budgets")
         println(realm.query<RealmBudget>().find { it.forEach { println(it.sum) } })
         println(realm.query<RealmBudget>().find { it.count() })
-        val instant = localDateTime.toInstant(TimeZone.UTC)
-        val realmInstant = instant.toRealmInstant()
-        return realm.query<RealmBudget>("realmInstant > $0", realmInstant).find().first()
+        val localDateTimeOfFirstMinuteOfTheDay = LocalDateTime(localDateTime.date, LocalTime(0, 0, 0))
+        val localDateTimeOfLastMinuteOfTheDay = LocalDateTime(localDateTime.date, LocalTime(23, 59, 59, 59))
+        val instantOfFirstMinuteOfTheDay = localDateTimeOfFirstMinuteOfTheDay.toInstant(TimeZone.UTC)
+        val realmInstant = instantOfFirstMinuteOfTheDay.toRealmInstant()
+        return realm
+            .query<RealmBudget>("realmInstant >= $0", realmInstant)
+            .find()
+            .first()
             .toDomainBudget()
     }
 
@@ -115,7 +121,7 @@ class ExpenseRepository(val realm: Realm) : ExpenseRepositoryInterface {
         )
         return Budget(
             sum = this.sum,
-            localDate = this.realmInstant.toInstant().toLocalDateTime(TimeZone.UTC),
+            endLocalDateTime = this.realmInstant.toInstant().toLocalDateTime(TimeZone.UTC),
         )
     }
 }

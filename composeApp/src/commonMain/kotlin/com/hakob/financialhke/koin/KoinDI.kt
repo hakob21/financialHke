@@ -1,6 +1,8 @@
 package com.hakob.financialhke.koin
 
 import com.hakob.financialhke.BusinessLogic
+import com.hakob.financialhke.codeUtils.ActualClockProvider
+import com.hakob.financialhke.codeUtils.ClockProvider
 import com.hakob.financialhke.db.repodomain.Budget
 import com.hakob.financialhke.db.repodomain.Expense
 import com.hakob.financialhke.db.repository.ExpenseRepositoryInterface
@@ -52,8 +54,13 @@ fun coreModule() = module {
 
     single {
         BusinessLogic(
+            get(),
             get()
         )
+    }
+
+    single<ClockProvider> {
+        ActualClockProvider()
     }
 
 //    single<EntryRepository> {
