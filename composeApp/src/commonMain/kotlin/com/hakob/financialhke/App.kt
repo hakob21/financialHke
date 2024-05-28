@@ -12,7 +12,14 @@ import androidx.compose.ui.text.input.ImeAction
 import com.hakob.financialhke.domain.Budget
 import com.hakob.financialhke.domain.Expense
 import io.realm.kotlin.types.RealmInstant
+import io.wojciechosak.calendar.config.rememberCalendarState
+import io.wojciechosak.calendar.view.CalendarView
+import io.wojciechosak.calendar.view.HorizontalCalendarView
 import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.Month
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -44,7 +51,7 @@ fun AppContent(
                 singleLine = true,
 //                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                label = { Text("Expense") },
+                label = { Text("Budget") },
                 keyboardActions = KeyboardActions(
 //                    onAny = {
 //                        println("HKEEE DONE TAPPED")
@@ -52,38 +59,60 @@ fun AppContent(
 //                    },
                     onDone = {
                         val result: Result<Unit> = runCatching {
-//                            businessLogic.setBudget(Budget(sum = textBudget.toDouble(), localDate = ))
+                            businessLogic.setBudget(
+                                Budget(
+                                    sum = textBudget.toDouble(),
+                                    endLocalDateTime = LocalDateTime(
+                                        LocalDate(2024, Month.JUNE, 26), LocalTime(23, 59, 59)
+                                    )
+                                )
+                            )
                         }
-                        println("All expenses: ${businessLogic.getAllExpenses()}")
+//                        println("All expenses: ${businessLogic.getAllExpenses()}")
 
                     }
                 )
             )
-            TextField(
-                value = textExpense,
-                onValueChange = { textExpense = it },
-                singleLine = true,
-//                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                label = { Text("ExpensePlaceholder") },
-                keyboardActions = KeyboardActions(
-//                    onAny = {
+//            TextField(
+//                value = textExpense,
+//                onValueChange = { textExpense = it },
+//                singleLine = true,
+////                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+//                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+//                label = { Text("ExpensePlaceholder") },
+//                keyboardActions = KeyboardActions(
+////                    onAny = {
+////                        println("HKEEE DONE TAPPED")
+////
+////                    },
+//                    onDone = {
+//                        val result: Result<Unit> = runCatching {
+//                            businessLogic.enterExpense(Expense(textExpense.toDouble()))
+//                        }
 //                        println("HKEEE DONE TAPPED")
+//                        println("All expenses: ${businessLogic.getAllExpenses()}")
 //
-//                    },
-                    onDone = {
-                        val result: Result<Unit> = runCatching {
-                            businessLogic.enterExpense(Expense(textExpense.toDouble()))
-                        }
-                        println("HKEEE DONE TAPPED")
-                        println("All expenses: ${businessLogic.getAllExpenses()}")
+//                    }
+//                )
+//            )
 
-                    }
-                )
-            )
             Button(
-                content = { Unit },
-                onClick = { Unit }
+                onClick = {
+                    runCatching {
+                        businessLogic.setBudget(
+                            Budget(
+                                sum = textBudget.toDouble(),
+                                endLocalDateTime = LocalDateTime(
+                                    LocalDate(2024, Month.JUNE, 26), LocalTime(23, 59, 59)
+                                )
+                            )
+                        )
+                    }
+                },
+                content = {
+                    Text("Submit")
+
+                },
             )
 //            Text(text = "hello1")
 //            Text(text = "hello2")

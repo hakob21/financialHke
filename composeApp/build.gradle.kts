@@ -101,6 +101,9 @@ kotlin {
 //            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0") // If using coroutines with the SDK
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0-RC.2")
             // Koin Test features
+
+            implementation("io.github.wojciechosak:calendar:1.0.0")
+
         }
         commonTest.dependencies {
             implementation("org.jetbrains.kotlin:kotlin-test:1.9.22") // version should be same as Kotlin version of the project. this dep adds @BeforeTest annotations and such. also @Test annotation
@@ -137,6 +140,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     packaging {
         resources {
@@ -158,6 +162,10 @@ android {
         debugImplementation(libs.compose.ui.tooling)
         // todo: maybe it needs to be here, not below
 //        testImplementation("org.testng:testng:6.9.6")
+
+        androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.6.7") // from bom?
+        debugImplementation("androidx.compose.ui:ui-test-manifest") // from bom?
+
     }
 }
 dependencies {
@@ -181,6 +189,10 @@ dependencies {
     // Koin for JUnit 5
     testImplementation("io.insert-koin:koin-test-junit5")
     testImplementation("org.testng:testng:6.9.6")
+
+//    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.6.7")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4") // from bom?
+    debugImplementation("androidx.compose.ui:ui-test-manifest") // from bom?
 
     // for Mockative https://github.com/mockative/mockative
     configurations
