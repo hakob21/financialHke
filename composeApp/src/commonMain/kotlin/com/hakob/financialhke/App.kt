@@ -25,15 +25,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hakob.financialhke.codeUtils.ClockProvider
+import com.hakob.financialhke.codeUtils.toLocalDateTimeTowardsEod
 import com.hakob.financialhke.domain.Budget
-import com.hakob.financialhke.domain.Expense
-import io.realm.kotlin.types.RealmInstant
 import io.wojciechosak.calendar.config.MonthYear
 import io.wojciechosak.calendar.config.rememberCalendarState
 import io.wojciechosak.calendar.config.toLocalDate
 import io.wojciechosak.calendar.view.CalendarView
-import io.wojciechosak.calendar.view.HorizontalCalendarView
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
@@ -57,10 +55,12 @@ fun App() {
 @Composable
 @Preview
 fun AppContent(
-    businessLogic: BusinessLogic = koinInject()
+    businessLogic: BusinessLogic = koinInject(),
+    clockProvider: ClockProvider = koinInject(),
 ) {
     var textBudget by remember { mutableStateOf("") }
     var textExpense by remember { mutableStateOf("") }
+    var pickedLocalDate by remember { mutableStateOf("") }
 
     MaterialTheme {
         Column {
@@ -119,12 +119,22 @@ fun AppContent(
                     DayView(
                         date = state.date,
                         isDotVisible = state.isActiveDay || Random.nextBoolean(),
-                        onClick = { },
+                        onClick = {
+                            val localDateOfPickedDate: LocalDate = state.date
+                            pickedLocalDate = localDateOfPickedDate.toString()
+                            println("hkeee instantOfPickedDate $localDateOfPickedDate")
+//                            val instantOfPickedDate = state.date.toLocalDateTimeTowardsEod().toInstant(TimeZone.UTC)
+//                            insta = instantOfPickedDate.toString()
+//                            println("hkeee instantOfPickedDate $instantOfPickedDate")
+
+                        },
                     )
                 },
-                config =
-                rememberCalendarState(
-                    startDate = MonthYear(year = 1994, month = Month.APRIL).toLocalDate(),
+                config = rememberCalendarState(
+                    startDate = MonthYear(
+                        year = clockProvider.getCurrentLocalDateTime().year,
+                        month = clockProvider.getCurrentLocalDateTime().month
+                    ).toLocalDate(),
                     monthOffset = 0,
                     showNextMonthDays = false,
                     showPreviousMonthDays = false,
@@ -133,17 +143,19 @@ fun AppContent(
                 ),
             )
 
-            HorizontalCalendarView(startDate = LocalDate(2024, 5, 21)) { monthOffset ->
-                CalendarView(
-                    config = rememberCalendarState(
-                        startDate = LocalDate(2024, 5, 21),
-                        monthOffset = 0
-                    ),
-                    day = { dayState ->
-                        // define your day composable here!
-                    }
-                )
-            }
+//            HorizontalCalendarView(
+//                startDate = LocalDate(2024, 5, 21)
+//            ) { monthOffset ->
+//                CalendarView(
+//                    config = rememberCalendarState(
+//                        startDate = LocalDate(2024, 5, 21),
+//                        monthOffset = 0
+//                    ),
+//                    day = { dayState ->
+//                        // define your day composable here!
+//                    }
+//                )
+//            }
 
             Button(
                 onClick = {
@@ -151,9 +163,10 @@ fun AppContent(
                         businessLogic.setBudget(
                             Budget(
                                 sum = textBudget.toDouble(),
-                                endLocalDateTime = LocalDateTime(
-                                    LocalDate(2024, Month.JUNE, 26), LocalTime(23, 59, 59)
-                                )
+                                endLocalDateTime = LocalDate.parse(pickedLocalDate).toLocalDateTimeTowardsEod()
+//                                LocalDateTime(
+//                                    LocalDate(2024, Month.JUNE, 26), LocalTime(23, 59, 59)
+//                                )
                             )
                         )
                     }
@@ -197,8 +210,7 @@ private fun DayView(
             modifier = modifier.aspectRatio(1f).padding(3.dp),
             contentPadding = PaddingValues(0.dp),
             border = BorderStroke(0.dp, Color.Transparent),
-            colors =
-            ButtonDefaults.outlinedButtonColors(
+            colors = ButtonDefaults.outlinedButtonColors(
                 backgroundColor = Color(0xffdaa92a),
             ),
         ) {
@@ -209,14 +221,14 @@ private fun DayView(
                 color = Color.White,
             )
         }
+        // Dot color and other parameters
         if (isDotVisible) {
             Canvas(
-                modifier =
-                Modifier
+                modifier = Modifier
                     .padding(bottom = 10.dp)
                     .size(8.dp)
                     .align(Alignment.BottomCenter),
-                onDraw = { drawCircle(color = Color(0xff2d2cb2)) },
+                onDraw = { drawCircle(color = Color.Red) },
             )
         }
     }
