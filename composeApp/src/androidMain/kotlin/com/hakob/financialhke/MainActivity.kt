@@ -13,7 +13,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 //            App()
-            Navigator(HomeScreen())
+            Navigator(SecondScreen())
         }
     }
 }

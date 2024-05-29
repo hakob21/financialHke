@@ -186,7 +186,7 @@ fun AppContent(
                         )
                     }
 
-                    navigator.push(SecondScreen(textBudget))
+                    navigator.push(SecondScreen())
                 },
                 content = {
                     Text("Submit")
@@ -259,7 +259,7 @@ class HomeScreen : Screen {
     }
 }
 
-data class SecondScreen(val budgetSum: String) : Screen {
+class SecondScreen : Screen {
 
     @Composable
     override fun Content() {
