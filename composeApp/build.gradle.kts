@@ -110,6 +110,7 @@ kotlin {
 
             implementation("cafe.adriel.voyager:voyager-screenmodel:1.0.0")
 
+            implementation("cafe.adriel.voyager:voyager-tab-navigator:1.0.0")
         }
         commonTest.dependencies {
             implementation("org.jetbrains.kotlin:kotlin-test:1.9.22") // version should be same as Kotlin version of the project. this dep adds @BeforeTest annotations and such. also @Test annotation
@@ -213,6 +214,8 @@ dependencies {
     // Navigator
     implementation("cafe.adriel.voyager:voyager-navigator:1.0.0")
     implementation("cafe.adriel.voyager:voyager-screenmodel:1.0.0")
+    // bottom navbar
+    implementation("cafe.adriel.voyager:voyager-tab-navigator:1.0.0")
 
 
     // Android
