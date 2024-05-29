@@ -25,6 +25,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.rememberScreenModel
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.hakob.financialhke.codeUtils.ClockProvider
 import com.hakob.financialhke.codeUtils.toLocalDateTimeTowardsEod
 import com.hakob.financialhke.domain.Budget
@@ -61,6 +67,8 @@ fun AppContent(
     var textBudget by remember { mutableStateOf("") }
     var textExpense by remember { mutableStateOf("") }
     var pickedLocalDate by remember { mutableStateOf("") }
+
+    val navigator = LocalNavigator.currentOrThrow
 
     MaterialTheme {
         Column {
@@ -163,13 +171,16 @@ fun AppContent(
                         businessLogic.setBudget(
                             Budget(
                                 sum = textBudget.toDouble(),
-                                endLocalDateTime = LocalDate.parse(pickedLocalDate).toLocalDateTimeTowardsEod()
+                                endLocalDateTime = LocalDate.parse(pickedLocalDate)
+                                    .toLocalDateTimeTowardsEod()
 //                                LocalDateTime(
 //                                    LocalDate(2024, Month.JUNE, 26), LocalTime(23, 59, 59)
 //                                )
                             )
                         )
                     }
+
+                    navigator.push(SecondScreen(textBudget))
                 },
                 content = {
                     Text("Submit")
@@ -233,3 +244,62 @@ private fun DayView(
         }
     }
 }
+
+
+class HomeScreenModel : ScreenModel {
+    // ...
+}
+
+class HomeScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        App()
+    }
+}
+
+data class SecondScreen(val budgetSum: String) : Screen {
+
+    @Composable
+    override fun Content() {
+        var textBudget by remember { mutableStateOf("") }
+        var textExpense by remember { mutableStateOf("") }
+        var pickedLocalDate by remember { mutableStateOf("") }
+
+        val navigator = LocalNavigator.currentOrThrow
+
+        MaterialTheme {
+            Button(
+                onClick = { Unit }
+            ) {
+                Text(budgetSum.toString())
+
+            }
+//        var showContent by remember { mutableStateOf(false) }
+//        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+//            Button(onClick = { showContent = !showContent }) {
+//                Text("Click me!")
+//            }
+//            AnimatedVisibility(showContent) {
+//                val greeting = remember { greeting.greet() }
+//                Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+//                    Image(painterResource(Res.drawable.compose_multiplatform), null)
+//                    Text("Compose: $greeting")
+//                }
+//            }
+//        }
+        }
+
+    }
+}
+
+//class SingleActivity : ComponentActivity() {
+//
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//
+//        setContent {
+//            Navigator(HomeScreen())
+//        }
+//    }
+//}

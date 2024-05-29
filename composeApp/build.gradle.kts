@@ -104,6 +104,12 @@ kotlin {
 
             implementation("io.github.wojciechosak:calendar:1.0.0")
 
+            implementation("cafe.adriel.voyager:voyager-navigator:1.0.0")
+
+            implementation("cafe.adriel.voyager:voyager-koin:1.0.0")
+
+            implementation("cafe.adriel.voyager:voyager-screenmodel:1.0.0")
+
         }
         commonTest.dependencies {
             implementation("org.jetbrains.kotlin:kotlin-test:1.9.22") // version should be same as Kotlin version of the project. this dep adds @BeforeTest annotations and such. also @Test annotation
@@ -200,6 +206,18 @@ dependencies {
         .forEach {
             add(it.name, "io.mockative:mockative-processor:2.1.0")
         }
+
+
+    // Multiplatform
+
+    // Navigator
+    implementation("cafe.adriel.voyager:voyager-navigator:1.0.0")
+    implementation("cafe.adriel.voyager:voyager-screenmodel:1.0.0")
+
+
+    // Android
+    // Koin integration
+    implementation("cafe.adriel.voyager:voyager-koin:1.0.0")
 
 }
 
