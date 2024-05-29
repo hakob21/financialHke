@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
@@ -17,10 +18,12 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.Typography
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -98,7 +101,8 @@ fun AppContent(
 //                        println("All expenses: ${businessLogic.getAllExpenses()}")
 
                     }
-                )
+                ),
+                modifier = Modifier.testTag("budgetInputTextField")
             )
 //            TextField(
 //                value = textExpense,
@@ -136,6 +140,7 @@ fun AppContent(
 //                            println("hkeee instantOfPickedDate $instantOfPickedDate")
 
                         },
+                        modifier = Modifier.testTag("day-${state.date}")
                     )
                 },
                 config = rememberCalendarState(
@@ -186,6 +191,7 @@ fun AppContent(
                     Text("Submit")
 
                 },
+                modifier = Modifier.testTag("submitButton")
             )
 //            Text(text = "hello1")
 //            Text(text = "hello2")
@@ -265,16 +271,33 @@ data class SecondScreen(val budgetSum: String) : Screen {
         var textBudget by remember { mutableStateOf("") }
         var textExpense by remember { mutableStateOf("") }
         var pickedLocalDate by remember { mutableStateOf("") }
+        val businessLogic: BusinessLogic = koinInject()
 
         val navigator = LocalNavigator.currentOrThrow
 
         MaterialTheme {
-            Button(
-                onClick = { Unit }
-            ) {
-                Text(budgetSum.toString())
-
+            LazyColumn {
+                item {
+                    Text(
+                        text = "Whole budget for the month ${budgetSum.toString()}",
+                        style = MaterialTheme.typography.body1,
+                        modifier = Modifier.testTag("secondScreenWholeBudget")
+                    )
+                }
+                item {
+                    Text(
+                        text = "Daily available budget ${businessLogic.getDailyAvailableAmount()}",
+                        style = MaterialTheme.typography.body1,
+                        modifier = Modifier.testTag("secondScreenDailyAvailableAmount")
+                    )
+                }
             }
+//            Button(
+//                onClick = { Unit }
+//            ) {
+//                Text(budgetSum.toString())
+//
+//            }
 //        var showContent by remember { mutableStateOf(false) }
 //        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 //            Button(onClick = { showContent = !showContent }) {
