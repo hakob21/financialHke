@@ -87,7 +87,7 @@ fun coreModule() = module {
                 Expense::class,
                 Budget::class
             )
-        ).schemaVersion(1).build()
+        ).schemaVersion(1).deleteRealmIfMigrationNeeded().build()
     }
 
 //    single { UsersDb(get()) }

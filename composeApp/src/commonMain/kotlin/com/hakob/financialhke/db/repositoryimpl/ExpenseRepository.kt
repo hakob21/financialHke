@@ -8,10 +8,12 @@ import com.hakob.financialhke.realmUtils.toInstant
 import com.hakob.financialhke.realmUtils.toRealmInstant
 import com.hakob.financialhke.db.repodomain.Expense as RealmExpense
 import io.realm.kotlin.Realm
+import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.internal.getIdentifierOrNull
 import io.realm.kotlin.query.RealmQuery
 import io.realm.kotlin.query.find
+import io.wojciechosak.calendar.utils.toMonthYear
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
@@ -45,7 +47,7 @@ class ExpenseRepository(val realm: Realm) : ExpenseRepositoryInterface {
 //                {
 //                    println("hke liveBudget ${liveBudget.sum}")
 //                    println("hke expense ${expense.sum}")
-                    liveBudget.sum -= expense.sum
+                liveBudget.sum -= expense.sum
 //                }
             }
         }
@@ -58,12 +60,16 @@ class ExpenseRepository(val realm: Realm) : ExpenseRepositoryInterface {
 
     override fun setBudget(budget: Budget): Budget {
         return realm.writeBlocking {
-            copyToRealm(RealmBudget().apply {
-                sum = budget.sum
-                // temporarily appending "Z" to the localDateTime property
-                realmInstant = Instant.parse(budget.endLocalDateTime.toString() + "Z")
-                    .toRealmInstant() //toRealmInstant() will convert localTime to UTC
-            })
+            copyToRealm(
+                RealmBudget().apply {
+                    _id = budget.endLocalDateTime.date.toMonthYear().toString()
+                    sum = budget.sum
+                    // temporarily appending "Z" to the localDateTime property
+                    realmInstant = Instant.parse(budget.endLocalDateTime.toString() + "Z")
+                        .toRealmInstant() //toRealmInstant() will convert localTime to UTC
+                },
+                UpdatePolicy.ALL
+            )
         }.toDomainBudget()
 
     }
@@ -77,9 +83,12 @@ class ExpenseRepository(val realm: Realm) : ExpenseRepositoryInterface {
         println("hke all budgets")
         println(realm.query<RealmBudget>().find { it.forEach { println(it.sum) } })
         println(realm.query<RealmBudget>().find { it.count() })
-        val localDateTimeOfFirstMinuteOfTheDay = LocalDateTime(localDateTime.date, LocalTime(0, 0, 0))
-        val localDateTimeOfLastMinuteOfTheDay = LocalDateTime(localDateTime.date, LocalTime(23, 59, 59, 59))
-        val instantOfFirstMinuteOfTheDay = localDateTimeOfFirstMinuteOfTheDay.toInstant(TimeZone.UTC)
+        val localDateTimeOfFirstMinuteOfTheDay =
+            LocalDateTime(localDateTime.date, LocalTime(0, 0, 0))
+        val localDateTimeOfLastMinuteOfTheDay =
+            LocalDateTime(localDateTime.date, LocalTime(23, 59, 59, 59))
+        val instantOfFirstMinuteOfTheDay =
+            localDateTimeOfFirstMinuteOfTheDay.toInstant(TimeZone.UTC)
         val realmInstant = instantOfFirstMinuteOfTheDay.toRealmInstant()
         return realm
             .query<RealmBudget>("realmInstant >= $0", realmInstant)

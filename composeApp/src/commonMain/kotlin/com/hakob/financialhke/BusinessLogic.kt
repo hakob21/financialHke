@@ -79,6 +79,8 @@ class BusinessLogic(
     }
 
     fun setBudget(budget: Budget): Budget {
+        expenseRepository.deleteAllBudgets()
+        expenseRepository.deleteAllExpenses()
         // extract Clock or Clock.System to a variable of this class, so that it can be injected from the test and in test always return the same value
         // at work codebase we have such providers
         val currentLocalDateTime = clockProvider.getCurrentLocalDateTime()

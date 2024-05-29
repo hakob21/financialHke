@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
@@ -18,8 +19,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.material.Typography
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,14 +30,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.hakob.financialhke.codeUtils.ClockProvider
 import com.hakob.financialhke.codeUtils.toLocalDateTimeTowardsEod
+import com.hakob.financialhke.composables.ExpenseComposable
 import com.hakob.financialhke.domain.Budget
+import com.hakob.financialhke.domain.Expense
 import io.wojciechosak.calendar.config.MonthYear
 import io.wojciechosak.calendar.config.rememberCalendarState
 import io.wojciechosak.calendar.config.toLocalDate
@@ -189,7 +190,6 @@ fun AppContent(
                 },
                 content = {
                     Text("Submit")
-
                 },
                 modifier = Modifier.testTag("submitButton")
             )
@@ -251,11 +251,6 @@ private fun DayView(
     }
 }
 
-
-class HomeScreenModel : ScreenModel {
-    // ...
-}
-
 class HomeScreen : Screen {
 
     @Composable
@@ -268,10 +263,22 @@ data class SecondScreen(val budgetSum: String) : Screen {
 
     @Composable
     override fun Content() {
-        var textBudget by remember { mutableStateOf("") }
+        var inputTextExpense by remember { mutableStateOf("") }
         var textExpense by remember { mutableStateOf("") }
         var pickedLocalDate by remember { mutableStateOf("") }
         val businessLogic: BusinessLogic = koinInject()
+//        val expensesList: MutableState<List<Expense>> = remember(businessLogic.getAllExpenses()) {
+        val expensesList: SnapshotStateList<Expense> = remember {
+            mutableStateListOf(*businessLogic.getAllExpenses().reversed().toTypedArray())
+        }
+
+        val dailyAvailableBudget = remember {
+            mutableStateOf(businessLogic.getDailyAvailableAmount())
+        }
+
+        val currentMonthBudget = remember {
+            mutableStateOf(businessLogic.getCurrentBudget())
+        }
 
         val navigator = LocalNavigator.currentOrThrow
 
@@ -279,19 +286,87 @@ data class SecondScreen(val budgetSum: String) : Screen {
             LazyColumn {
                 item {
                     Text(
-                        text = "Whole budget for the month ${budgetSum.toString()}",
+                        text = "Whole budget for the month ${currentMonthBudget.value.sum.toInt()}",
                         style = MaterialTheme.typography.body1,
                         modifier = Modifier.testTag("secondScreenWholeBudget")
                     )
                 }
                 item {
                     Text(
-                        text = "Daily available budget ${businessLogic.getDailyAvailableAmount()}",
+                        text = "Daily available budget ${dailyAvailableBudget.value}",
                         style = MaterialTheme.typography.body1,
                         modifier = Modifier.testTag("secondScreenDailyAvailableAmount")
                     )
                 }
+                item {
+                    TextField(
+                        value = inputTextExpense,
+                        onValueChange = { inputTextExpense = it },
+                        singleLine = true,
+//                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                        label = { Text("Expense") },
+                        keyboardActions = KeyboardActions(
+//                    onAny = {
+//                        println("HKEEE DONE TAPPED")
+//
+//                    },
+                            onDone = {
+                                val result: Result<Unit> = runCatching {
+//                                    businessLogic.setBudget(
+//                                        Budget(
+//                                            sum = inputTextExpense.toDouble(),
+//                                            endLocalDateTime = LocalDateTime(
+//                                                LocalDate(2024, Month.JUNE, 26), LocalTime(23, 59, 59)
+//                                            )
+//                                        )
+//                                    )
+                                }
+//                        println("All expenses: ${businessLogic.getAllExpenses()}")
+
+                            }
+                        ),
+                        modifier = Modifier.testTag("expenseInputTextField")
+                    )
+                }
+                item {
+                    Button(
+                        onClick = {
+                            runCatching {
+                                businessLogic.enterExpense(
+                                    expense = Expense(
+                                        sum = inputTextExpense.toDouble()
+                                    )
+                                )
+                            }
+                            expensesList.add(
+                                0,
+                                Expense(
+                                    sum = inputTextExpense.toDouble()
+                                )
+                            )
+
+                            dailyAvailableBudget.value = businessLogic.getDailyAvailableAmount()
+                            currentMonthBudget.value = businessLogic.getCurrentBudget()
+
+
+                        },
+                        content = {
+                            Text("Add expense")
+                        },
+                        modifier = Modifier.testTag("addExpenseButton")
+                    )
+                }
+                items(
+//                count = expenseRepository.expenses().size,
+                    items = expensesList
+                ) { expense ->
+                    ExpenseComposable(expense)
+                }
             }
+//            LazyColumn() {
+//            }
+
 //            Button(
 //                onClick = { Unit }
 //            ) {
