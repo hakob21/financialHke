@@ -90,11 +90,20 @@ class ExpenseRepository(val realm: Realm) : ExpenseRepositoryInterface {
         val instantOfFirstMinuteOfTheDay =
             localDateTimeOfFirstMinuteOfTheDay.toInstant(TimeZone.UTC)
         val realmInstant = instantOfFirstMinuteOfTheDay.toRealmInstant()
-        return realm
+
+        val currentMonthlyBudget = realm
             .query<RealmBudget>("realmInstant >= $0", realmInstant)
             .find()
-            .first()
-            .toDomainBudget()
+
+        // no budget set yet
+        return if (currentMonthlyBudget.isEmpty()) {
+            Budget(0.0, localDateTime)
+        } else {
+            currentMonthlyBudget
+                .first()
+                .toDomainBudget()
+
+        }
     }
 
     override fun deleteAllExpenses() {

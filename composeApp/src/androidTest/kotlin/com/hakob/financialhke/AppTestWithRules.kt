@@ -43,6 +43,9 @@ class AppTestWithRules {
     val textWithDailyAvailableAmount = rule.onNodeWithTag("secondScreenDailyAvailableAmount")
     val expenseInputTextField = rule.onNodeWithTag("expenseInputTextField")
 
+
+    val startScreen = SecondScreen()
+
 //    private val expenseRepository: ExpenseRepositoryInterface by inject(ExpenseRepository::class.java)
 
 
@@ -85,7 +88,7 @@ class AppTestWithRules {
     fun test1() {
         // should set budget and some end day and submit and check that on the second screen daily available budget and whole budget for the month are correct
         rule.setContent {
-            Navigator(HomeScreen())
+            Navigator(startScreen)
         }
         val textInput = "1000"
 
@@ -105,7 +108,7 @@ class AppTestWithRules {
     fun test2() {
         // should set budget and some end day and submit and check that on the second screen daily available budget and whole budget for the month are correct and then go back a screen and set all again with different value and check values on the second screen
         rule.setContent {
-            Navigator(HomeScreen())
+            Navigator(startScreen)
         }
         val textInput = "1000"
 
@@ -145,7 +148,7 @@ class AppTestWithRules {
     fun test3() {
         // should set budget and some end day and submit and check that on the second screen daily available budget and whole budget for the month are correct
         rule.setContent {
-            Navigator(HomeScreen())
+            Navigator(startScreen)
         }
         val textInput = "1000"
 

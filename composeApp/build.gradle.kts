@@ -55,6 +55,8 @@ kotlin {
     
     sourceSets {
         iosMain.dependencies {
+            implementation("co.touchlab:stately-common:2.0.5")
+
             // i don't think this is needed
             implementation("io.insert-koin:koin-core")
 //            implementation("io.insert-koin:koin-core") for some reason works even uncommented
@@ -176,6 +178,8 @@ android {
     }
 }
 dependencies {
+    // need this for iOS to run https://github.com/cashapp/sqldelight/issues/4357#issuecomment-1839905700
+    implementation("co.touchlab:stately-common:2.0.5")
     // not sure if needed for @Preview to work. not sure if it needs to be in androidMain
     // copied from the original Android Studio project template when you crate a KMP project
     implementation(libs.compose.material3)

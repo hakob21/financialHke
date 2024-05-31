@@ -91,4 +91,9 @@ class BusinessLogic(
             throw RuntimeException("The time set in the budget is earlier than current localDateTime ")
         }
     }
+
+    fun clearDatabase() {
+        expenseRepository.deleteAllBudgets()
+        expenseRepository.deleteAllExpenses()
+    }
 }

@@ -14,17 +14,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -35,14 +37,17 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
+import cafe.adriel.voyager.navigator.tab.TabDisposable
+import cafe.adriel.voyager.navigator.tab.TabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.hakob.financialhke.codeUtils.ClockProvider
 import com.hakob.financialhke.codeUtils.toLocalDateTimeTowardsEod
@@ -64,6 +69,59 @@ import org.koin.compose.KoinContext
 import org.koin.compose.koinInject
 import kotlin.random.Random
 
+@Composable
+fun Content() {
+    TabNavigator(
+        HomeTab,
+        tabDisposable = {
+            TabDisposable(
+                navigator = it,
+                tabs = listOf(HomeTab, FavoritesTab)
+            )
+        }
+    ) { tabNavigator ->
+        Scaffold(
+//            topBar = {
+//                TopAppBar(
+//                    title = { Text(text = tabNavigator.current.options.title) }
+//                )
+//            },
+            content = {
+                it.calculateLeftPadding(LayoutDirection.Ltr)
+//                CurrentTab()
+                println("Hkeeeeeee1 ${tabNavigator.current == HomeTab}")
+                println("Hkeeeeeee2 ${tabNavigator.current}")
+                println("Hkeeeeeee3 ${tabNavigator.current.options.title}")
+                if (tabNavigator.current == HomeTab) {
+                    Navigator(SecondScreen())
+                } else if(tabNavigator.current == FavoritesTab) {
+                    Navigator(HomeScreen())
+                }
+            },
+            bottomBar = {
+                BottomNavigation {
+                    TabNavigationItem(HomeTab)
+                    TabNavigationItem(FavoritesTab)
+//                    TabNavigationItem(ProfileTab)
+                }
+            }
+        )
+    }
+}
+
+@Composable
+private fun RowScope.TabNavigationItem(tab: Tab) {
+    val tabNavigator = LocalTabNavigator.current
+
+    BottomNavigationItem(
+        selected = tabNavigator.current.key == tab.key,
+        onClick = { tabNavigator.current = tab },
+        icon = { Icon(painter = tab.options.icon!!, contentDescription = tab.options.title) }
+    )
+}
+
+
+
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun App() {
@@ -79,9 +137,12 @@ fun AppContent(
     businessLogic: BusinessLogic = koinInject(),
     clockProvider: ClockProvider = koinInject(),
 ) {
+    // HKEEE: temporarily here, until I figure out a better way to clear database in between runs
+    businessLogic.clearDatabase()
     var textBudget by remember { mutableStateOf("") }
     var textExpense by remember { mutableStateOf("") }
     var pickedLocalDate by remember { mutableStateOf("") }
+    var budgetWasSet by remember { mutableStateOf(false) }
 
     val navigator = LocalNavigator.currentOrThrow
 
@@ -109,6 +170,7 @@ fun AppContent(
                                     )
                                 )
                             )
+                            budgetWasSet = true
                         }
 //                        println("All expenses: ${businessLogic.getAllExpenses()}")
 
@@ -197,7 +259,7 @@ fun AppContent(
                         )
                     }
 
-                    navigator.push(SecondScreen())
+//                    navigator.push(SecondScreen())
                 },
                 content = {
                     Text("Submit")
@@ -221,6 +283,27 @@ fun AppContent(
 //                }
 //            }
 //        }
+    }
+    if (budgetWasSet) {
+        OpenAlertDialog(title = "You budget is set!", text = "Budget until ${pickedLocalDate} is $textBudget")
+        budgetWasSet = false
+    }
+}
+
+@Composable
+fun OpenAlertDialog(title: String, text: String) {
+    var isDialogOpen by remember { mutableStateOf(true) }
+    if (isDialogOpen) {
+        AlertDialog(
+            onDismissRequest = { },
+            confirmButton = {
+                Button(onClick = { isDialogOpen = false }) {
+                    Text("OK")
+                }
+            },
+            title = { Text(title) },
+            text = { Text(text) },
+        )
     }
 }
 
@@ -401,6 +484,7 @@ class SecondScreen : Screen {
 
     }
 }
+
 
 object HomeTab : Tab {
 
