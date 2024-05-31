@@ -1,12 +1,19 @@
 package com.hakob.financialhke.realmpoc
 
+import com.hakob.financialhke.db.repodomain.Budget as RealmBudget
+import com.hakob.financialhke.db.repodomain.Expense as RealmExpense
 import com.hakob.financialhke.db.repository.ExpenseRepositoryInterface
 import com.hakob.financialhke.db.repositoryimpl.ExpenseRepository
+import com.hakob.financialhke.domain.Budget
 import com.hakob.financialhke.domain.Expense
+import io.realm.kotlin.Configuration
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
-import com.hakob.financialhke.db.repodomain.Expense as RealmExpense
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.Month
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -17,7 +24,14 @@ class RealmPocTest {
     @BeforeTest
     fun setup() = runTest {
 
-        val configuration = RealmConfiguration.create(schema = setOf(RealmExpense::class))
+//        val configuration = RealmConfiguration.create(schema = setOf(RealmExpense::class))
+        val configuration = RealmConfiguration.Builder(
+            schema = setOf(
+                // need add object class references here, which need to be added to the DB schema
+                RealmExpense::class,
+                RealmBudget::class
+            )
+        ).schemaVersion(1).deleteRealmIfMigrationNeeded().build()
         val realm = Realm.open(configuration)
 
         expenseRepositoryInterface = ExpenseRepository(realm)
@@ -28,6 +42,8 @@ class RealmPocTest {
     fun `should insert an Entry record to the DB and fetch all entries where single record is the inserted Entry`() {
         runTest {
             // given
+            val budget = Budget(sum = 1000.0, LocalDateTime(2024, Month.JUNE, 26, 23, 59, 59))
+            val insertedBudget = expenseRepositoryInterface.setBudget(budget)
             val expenseToInsert = Expense(sum = 1.0)
 
             // when

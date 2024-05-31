@@ -1,4 +1,6 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
@@ -30,6 +32,16 @@ kotlin {
                 // mentioned jvmTarget 19, but with 19 it didn't work because android sdk seems to not support 19
                 // however why tf it says 19 in the link then?
                 jvmTarget = "17"
+            }
+        }
+
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        instrumentedTestVariant {
+            sourceSetTree.set(KotlinSourceSetTree.test)
+
+            dependencies {
+                implementation("androidx.compose.ui:ui-test-junit4-android:version")
+                debugImplementation("androidx.compose.ui:ui-test-manifest:version")
             }
         }
     }
@@ -119,6 +131,11 @@ kotlin {
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
             implementation("io.mockative:mockative:2.1.0") // for mocking https://github.com/mockative/mockative
             implementation("io.insert-koin:koin-test")
+
+            // compose UI tests https://markonovakovic.medium.com/compose-multiplatform-ui-tests-d59b398bb984
+            implementation(kotlin("test"))
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
 
         }
     }
