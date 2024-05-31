@@ -1,7 +1,9 @@
 package com.hakob.financialhke.koin
 
-import com.hakob.financialhke.db.repository.EntryRepository
-import com.hakob.financialhke.Greeting
+import com.hakob.financialhke.BusinessLogic
+import com.hakob.financialhke.codeUtils.ActualClockProvider
+import com.hakob.financialhke.codeUtils.ClockProvider
+import com.hakob.financialhke.db.repodomain.Budget
 import com.hakob.financialhke.db.repodomain.Expense
 import com.hakob.financialhke.db.repository.ExpenseRepositoryInterface
 import com.hakob.financialhke.db.repositoryimpl.ExpenseRepository
@@ -51,9 +53,14 @@ fun coreModule() = module {
 //    }
 
     single {
-        Greeting(
+        BusinessLogic(
+            get(),
             get()
         )
+    }
+
+    single<ClockProvider> {
+        ActualClockProvider()
     }
 
 //    single<EntryRepository> {
@@ -76,9 +83,11 @@ fun coreModule() = module {
     single<Configuration> {
         RealmConfiguration.Builder(
             schema = setOf(
-                Expense::class
+                // need add object class references here, which need to be added to the DB schema
+                Expense::class,
+                Budget::class
             )
-        ).schemaVersion(1).build()
+        ).schemaVersion(1).deleteRealmIfMigrationNeeded().build()
     }
 
 //    single { UsersDb(get()) }

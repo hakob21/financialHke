@@ -55,6 +55,8 @@ kotlin {
     
     sourceSets {
         iosMain.dependencies {
+            implementation("co.touchlab:stately-common:2.0.5")
+
             // i don't think this is needed
             implementation("io.insert-koin:koin-core")
 //            implementation("io.insert-koin:koin-core") for some reason works even uncommented
@@ -99,11 +101,25 @@ kotlin {
             implementation("io.realm.kotlin:library-base:1.13.0")
 //            implementation("io.realm.kotlin:library-sync:1.13.0") // If using Device Sync
 //            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0") // If using coroutines with the SDK
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0-RC.2")
+            // Koin Test features
+
+            implementation("io.github.wojciechosak:calendar:1.0.0")
+
+            implementation("cafe.adriel.voyager:voyager-navigator:1.0.0")
+
+            implementation("cafe.adriel.voyager:voyager-koin:1.0.0")
+
+            implementation("cafe.adriel.voyager:voyager-screenmodel:1.0.0")
+
+            implementation("cafe.adriel.voyager:voyager-tab-navigator:1.0.0")
         }
         commonTest.dependencies {
             implementation("org.jetbrains.kotlin:kotlin-test:1.9.22") // version should be same as Kotlin version of the project. this dep adds @BeforeTest annotations and such. also @Test annotation
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
             implementation("io.mockative:mockative:2.1.0") // for mocking https://github.com/mockative/mockative
+            implementation("io.insert-koin:koin-test")
+
         }
     }
 }
@@ -133,6 +149,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     packaging {
         resources {
@@ -154,9 +171,15 @@ android {
         debugImplementation(libs.compose.ui.tooling)
         // todo: maybe it needs to be here, not below
 //        testImplementation("org.testng:testng:6.9.6")
+
+        androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.6.7") // from bom?
+        debugImplementation("androidx.compose.ui:ui-test-manifest") // from bom?
+
     }
 }
 dependencies {
+    // need this for iOS to run https://github.com/cashapp/sqldelight/issues/4357#issuecomment-1839905700
+    implementation("co.touchlab:stately-common:2.0.5")
     // not sure if needed for @Preview to work. not sure if it needs to be in androidMain
     // copied from the original Android Studio project template when you crate a KMP project
     implementation(libs.compose.material3)
@@ -178,12 +201,30 @@ dependencies {
     testImplementation("io.insert-koin:koin-test-junit5")
     testImplementation("org.testng:testng:6.9.6")
 
+//    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.6.7")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4") // from bom?
+    debugImplementation("androidx.compose.ui:ui-test-manifest") // from bom?
+
     // for Mockative https://github.com/mockative/mockative
     configurations
         .filter { it.name.startsWith("ksp") && it.name.contains("Test") }
         .forEach {
             add(it.name, "io.mockative:mockative-processor:2.1.0")
         }
+
+
+    // Multiplatform
+
+    // Navigator
+    implementation("cafe.adriel.voyager:voyager-navigator:1.0.0")
+    implementation("cafe.adriel.voyager:voyager-screenmodel:1.0.0")
+    // bottom navbar
+    implementation("cafe.adriel.voyager:voyager-tab-navigator:1.0.0")
+
+
+    // Android
+    // Koin integration
+    implementation("cafe.adriel.voyager:voyager-koin:1.0.0")
 
 }
 
