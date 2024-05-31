@@ -35,14 +35,17 @@ kotlin {
             }
         }
 
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        instrumentedTestVariant {
-            sourceSetTree.set(KotlinSourceSetTree.test)
+        androidTarget {
+            @OptIn(ExperimentalKotlinGradlePluginApi::class)
+            instrumentedTestVariant {
+                sourceSetTree.set(KotlinSourceSetTree.test)
 
-            dependencies {
-                implementation("androidx.compose.ui:ui-test-junit4-android:version")
-                debugImplementation("androidx.compose.ui:ui-test-manifest:version")
+                dependencies {
+                    implementation("androidx.compose.ui:ui-test-junit4-android:1.5.4")
+                    debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.4")
+                }
             }
+            //...
         }
     }
 
@@ -64,7 +67,7 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
         iosMain.dependencies {
             implementation("co.touchlab:stately-common:2.0.5")
@@ -74,7 +77,7 @@ kotlin {
 //            implementation("io.insert-koin:koin-core") for some reason works even uncommented
 
         }
-        
+
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
@@ -127,15 +130,20 @@ kotlin {
             implementation("cafe.adriel.voyager:voyager-tab-navigator:1.0.0")
         }
         commonTest.dependencies {
+            // compose UI tests https://markonovakovic.medium.com/compose-multiplatform-ui-tests-d59b398bb984
+//            implementation(kotlin("test"))
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
+
             implementation("org.jetbrains.kotlin:kotlin-test:1.9.22") // version should be same as Kotlin version of the project. this dep adds @BeforeTest annotations and such. also @Test annotation
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
             implementation("io.mockative:mockative:2.1.0") // for mocking https://github.com/mockative/mockative
-            implementation("io.insert-koin:koin-test")
+//            implementation("io.insert-koin:koin-test")
+//            implementation("io.insert-koin:koin-test-junit4")
+//            // Koin for JUnit 5
+//            implementation("io.insert-koin:koin-test-junit5")
 
-            // compose UI tests https://markonovakovic.medium.com/compose-multiplatform-ui-tests-d59b398bb984
-            implementation(kotlin("test"))
-            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-            implementation(compose.uiTest)
+
 
         }
     }

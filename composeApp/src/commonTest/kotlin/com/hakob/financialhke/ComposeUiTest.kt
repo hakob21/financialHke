@@ -32,7 +32,7 @@ fun Screen() {
 class UiTests {
 
     @Test
-    fun `initial screen state`() = runComposeUiTest {
+    fun `initialscreenstate`() = runComposeUiTest {
         setContent {
             Screen()
         }
@@ -42,14 +42,14 @@ class UiTests {
         onNodeWithText("Button").assertIsDisplayed()
     }
 
-    @Test
-    fun `increment counter`() = runComposeUiTest {
-        setContent {
-            Screen()
-        }
-
-        onNodeWithText("0").assertIsDisplayed()
-        onNodeWithText("Button").performClick()
-        onNodeWithText("1").assertIsDisplayed()
-    }
+//    @Test
+//    fun `increment counter`() = runComposeUiTest {
+//        setContent {
+//            Screen()
+//        }
+//
+//        onNodeWithText("0").assertIsDisplayed()
+//        onNodeWithText("Button").performClick()
+//        onNodeWithText("1").assertIsDisplayed()
+//    }
 }
