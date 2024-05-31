@@ -50,7 +50,7 @@ class BusinessLogicTest {
 
     // business logic layer test
     @Test
-    fun `should set the budget`() {
+    fun should_set_the_budget() {
 //        val instantNow: Instant = Clock.System.now()
 //        instantNow.toString()  // returns something like 2015-12-31T12:30:00Z
         // hke how can we parse and convert

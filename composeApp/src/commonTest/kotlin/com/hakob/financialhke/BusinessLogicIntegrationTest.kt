@@ -69,7 +69,7 @@ class BusinessLogicIntegrationTest : KoinTest {
 
     // business logic layer test
     @Test
-    fun `should add expense to the db and subtract from the whole budget`() {
+    fun should_add_expense_to_the_db_and_subtract_from_the_whole_budget() {
 //        val instantNow: Instant = Clock.System.now()
 //        instantNow.toString()  // returns something like 2015-12-31T12:30:00Z
         // hke how can we parse and convert
@@ -97,7 +97,7 @@ class BusinessLogicIntegrationTest : KoinTest {
     }
 
     @Test
-    fun `should set budget and get for current month`() {
+    fun should_set_budget_and_get_for_current_month() {
         // given
         // setting budget until the end of june
         val endOfJune = LocalDateTime(LocalDate(2024, Month.JUNE, 26), LocalTime(23, 59, 59))
@@ -117,7 +117,7 @@ class BusinessLogicIntegrationTest : KoinTest {
 
     // business logic layer test
     @Test
-    fun `new updated test should set the budget`() {
+    fun new_updated_test_should_set_the_budget() {
         // given
         val endOfJune = LocalDateTime(LocalDate(2024, Month.JUNE, 26), LocalTime(23, 59, 59))
 // or shorter
@@ -138,7 +138,7 @@ class BusinessLogicIntegrationTest : KoinTest {
 
     // business logic layer test 2
     @Test
-    fun `should set budget then add expense to the db with subtracting from the current month's budget`() {
+    fun should_set_budget_then_add_expense_to_the_db_with_subtracting_from_the_current_months_budget() {
         // given
         // set budget until end of june
         val endOfJune = LocalDateTime(LocalDate(2024, Month.JUNE, 26), LocalTime(23, 59, 59))
@@ -169,7 +169,7 @@ class BusinessLogicIntegrationTest : KoinTest {
     }
 
     @Test
-    fun `should get daily available amount`() {
+    fun should_get_daily_available_amount() {
         // given
         // set budget until end of june
         val endOfJune = LocalDateTime(LocalDate(2024, Month.JUNE, 3), LocalTime(23, 59, 59))
@@ -200,7 +200,7 @@ class BusinessLogicIntegrationTest : KoinTest {
     }
 
     @Test
-    fun `testCase1`() {
+    fun testCase1() {
         val endLocalDateTime: LocalDateTime = LocalDateTime(LocalDate(2024, Month.JUNE, 26), LocalTime(23, 59, 59))
         val budgetSum: Double = 550.0
         val expectedDailyAvailableAmount: Int = 21
@@ -213,7 +213,7 @@ class BusinessLogicIntegrationTest : KoinTest {
 
     // this scenario should actually write something like "less than 1 EUR daily"
     @Test
-    fun `testCase2`() {
+    fun testCase2() {
         val endLocalDateTime: LocalDateTime = LocalDateTime(LocalDate(2024, Month.JUNE, 26), LocalTime(23, 59, 59))
         val budgetSum: Double = 1.0
         val expectedDailyAvailableAmount: Int = 0
@@ -225,7 +225,7 @@ class BusinessLogicIntegrationTest : KoinTest {
     }
 
     @Test
-    fun `testCase3 time part of the endLocalDateTime is earlier than NOW and should still consider this as 1 day of budget i e should ignore the time part and only calculate based on the days`() {
+    fun testCase3_time_part_of_the_endLocalDateTime_is_earlier_than_NOW_and_should_still_consider_this_as_1_day_of_budget_i_e_should_ignore_the_time_part_and_only_calculate_based_on_the_days() {
         val endLocalDateTime: LocalDateTime = LocalDateTime(LocalDate(2024, Month.JUNE, 1), LocalTime(1, 59, 59))
         val budgetSum: Double = 550.0
         val expectedDailyAvailableAmount: Int = 550

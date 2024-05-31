@@ -39,7 +39,7 @@ class RealmPocTest {
     }
 
     @Test
-    fun `should insert an Entry record to the DB and fetch all entries where single record is the inserted Entry`() {
+    fun should_insert_an_Entry_record_to_the_DB_and_fetch_all_entries_where_single_record_is_the_inserted_Entry() {
         runTest {
             // given
             val budget = Budget(sum = 1000.0, LocalDateTime(2024, Month.JUNE, 26, 23, 59, 59))

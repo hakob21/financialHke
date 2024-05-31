@@ -24,7 +24,7 @@ class SimpleKoinSampleTest : KoinTest {
     private val expenseRepository: ExpenseRepositoryInterface by inject()
 
     @Test
-    fun `should inject my components`() {
+    fun should_inject_my_components() {
         startKoin {
             modules(
                 module {
