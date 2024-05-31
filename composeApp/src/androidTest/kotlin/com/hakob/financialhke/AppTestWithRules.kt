@@ -17,15 +17,9 @@ import cafe.adriel.voyager.navigator.Navigator
 import com.hakob.financialhke.codeUtils.ClockProvider
 import com.hakob.financialhke.db.repository.ExpenseRepositoryInterface
 import com.hakob.financialhke.db.repositoryimpl.ExpenseRepository
-import com.hakob.financialhke.koin.coreModule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.koin.compose.koinInject
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.module
-import org.koin.java.KoinJavaComponent.inject
 
 //class AppTestWithRules : KoinTest {
 class AppTestWithRules {
