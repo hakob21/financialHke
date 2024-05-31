@@ -128,7 +128,7 @@ kotlin {
         }
         commonTest.dependencies {
             // compose UI tests https://markonovakovic.medium.com/compose-multiplatform-ui-tests-d59b398bb984
-//            implementation(kotlin("test"))
+            implementation(kotlin("test"))
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             implementation(compose.uiTest)
 
