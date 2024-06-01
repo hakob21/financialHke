@@ -1,4 +1,6 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
@@ -19,7 +21,17 @@ if (taskIsRunningTest) {
         annotation("io.github.Mockable")
     }
 }
+tasks.withType<Test> {
+    filter {
+//        setExcludePatterns("*UiTest*")
+//        setExcludePatterns("com/hakob/financialhke/UiTests/**")
 
+//        https://docs.gradle.org/current/userguide/java_testing.html#test_filtering
+        excludeTestsMatching("com.hakob.financialhke.UiTests.*")
+        // or double **
+//        excludeTestsMatching("com.hakob.financialhke.UiTests.**")
+    }
+}
 kotlin {
     androidTarget {
         compilations.all {
@@ -30,6 +42,16 @@ kotlin {
                 // mentioned jvmTarget 19, but with 19 it didn't work because android sdk seems to not support 19
                 // however why tf it says 19 in the link then?
                 jvmTarget = "17"
+            }
+        }
+
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        instrumentedTestVariant {
+            sourceSetTree.set(KotlinSourceSetTree.test)
+
+            dependencies {
+                implementation("androidx.compose.ui:ui-test-junit4-android:1.5.4")
+                debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.4")
             }
         }
     }
@@ -115,10 +137,21 @@ kotlin {
             implementation("cafe.adriel.voyager:voyager-tab-navigator:1.0.0")
         }
         commonTest.dependencies {
+            // compose UI tests https://markonovakovic.medium.com/compose-multiplatform-ui-tests-d59b398bb984
+            implementation(kotlin("test"))
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
+
             implementation("org.jetbrains.kotlin:kotlin-test:1.9.22") // version should be same as Kotlin version of the project. this dep adds @BeforeTest annotations and such. also @Test annotation
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
             implementation("io.mockative:mockative:2.1.0") // for mocking https://github.com/mockative/mockative
-            implementation("io.insert-koin:koin-test")
+            compileOnly("io.insert-koin:koin-test") // for some reason after adding the compose.uiTest stuff like from here https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-test.html#writing-and-running-tests-with-compose-multiplatform
+            // need to change `implementation` to `compileOnly`
+
+//            // compose UI tests https://markonovakovic.medium.com/compose-multiplatform-ui-tests-d59b398bb984
+//            implementation(kotlin("test"))
+//            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+//            implementation(compose.uiTest)
 
         }
     }

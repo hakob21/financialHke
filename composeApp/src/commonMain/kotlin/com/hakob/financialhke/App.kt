@@ -88,10 +88,6 @@ fun Content() {
 //            },
             content = {
                 it.calculateLeftPadding(LayoutDirection.Ltr)
-//                CurrentTab()
-                println("Hkeeeeeee1 ${tabNavigator.current == HomeTab}")
-                println("Hkeeeeeee2 ${tabNavigator.current}")
-                println("Hkeeeeeee3 ${tabNavigator.current.options.title}")
                 if (tabNavigator.current == HomeTab) {
                     Navigator(SecondScreen())
                 } else if(tabNavigator.current == FavoritesTab) {

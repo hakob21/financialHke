@@ -1,5 +1,9 @@
 package com.hakob.financialhke
 
+import com.hakob.financialhke.codeUtils.ActualClockProvider
+import com.hakob.financialhke.codeUtils.ClockProvider
+import com.hakob.financialhke.db.repodomain.Budget
+import com.hakob.financialhke.db.repodomain.Expense
 import com.hakob.financialhke.db.repository.ExpenseRepositoryInterface
 import com.hakob.financialhke.db.repositoryimpl.ExpenseRepository
 import io.realm.kotlin.Configuration
@@ -20,10 +24,45 @@ class SimpleKoinSampleTest : KoinTest {
     private val expenseRepository: ExpenseRepositoryInterface by inject()
 
     @Test
-    fun `should inject my components`() {
+    fun should_inject_my_components() {
         startKoin {
             modules(
                 module {
+//    single {
+//        EntryQueries(
+//            get(),
+//        )
+//    }
+//    single {
+//        SqlDelightEntryRepository(
+//            get(),
+//        )
+//    }
+
+                    single {
+                        BusinessLogic(
+                            get(),
+                            get()
+                        )
+                    }
+
+                    single<ClockProvider> {
+                        ActualClockProvider()
+                    }
+
+//    single<EntryRepository> {
+//        SqlDelightEntryRepository(
+//            get()
+//        )
+//    }
+//    single<DogApi> {
+//        DogApiImpl(
+//            getWith("DogApiImpl"),
+//            get()
+//        )
+//    }
+
+
                     single<ExpenseRepositoryInterface> { ExpenseRepository(get()) }
 
                     single { Realm.open(get()) }
@@ -31,10 +70,19 @@ class SimpleKoinSampleTest : KoinTest {
                     single<Configuration> {
                         RealmConfiguration.Builder(
                             schema = setOf(
-                                com.hakob.financialhke.db.repodomain.Expense::class
+                                // need add object class references here, which need to be added to the DB schema
+                                Expense::class,
+                                Budget::class
                             )
-                        ).schemaVersion(1).build()
+                        ).schemaVersion(1).deleteRealmIfMigrationNeeded().build()
                     }
+
+//    single { UsersDb(get()) }
+//    single { ReportsDb(get()) }
+
+//    val configuration = RealmConfiguration.create(schema = setOf(Expense::class))
+//    Realm.open(configuration)
+
                 })
         }
 

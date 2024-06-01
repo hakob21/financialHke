@@ -4,6 +4,7 @@ import com.hakob.financialhke.db.repository.ExpenseRepositoryInterface
 import com.hakob.financialhke.domain.Budget
 import com.hakob.financialhke.domain.Expense
 import com.hakob.financialhke.utils.annotation.testCodeUtils.AlwaysJuneFirstClockProvider
+import com.hakob.financialhke.utils.annotation.testCodeUtils.AlwaysJune30ClockProvider
 import io.mockative.Mock
 import io.mockative.classOf
 import io.mockative.every
@@ -11,8 +12,6 @@ import io.mockative.mock
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -41,6 +40,8 @@ class BusinessLogicTest {
 
     private val alwaysJuneFirstClockProvider: AlwaysJuneFirstClockProvider = AlwaysJuneFirstClockProvider()
 
+    private val alwaysJune30ClockProvider: AlwaysJune30ClockProvider = AlwaysJune30ClockProvider()
+
     private val businessLogic: BusinessLogic = BusinessLogic(expenseRepository, alwaysJuneFirstClockProvider)
 
     @AfterTest
@@ -49,7 +50,7 @@ class BusinessLogicTest {
 
     // business logic layer test
     @Test
-    fun `should set the budget`() {
+    fun should_set_the_budget() {
 //        val instantNow: Instant = Clock.System.now()
 //        instantNow.toString()  // returns something like 2015-12-31T12:30:00Z
         // hke how can we parse and convert
@@ -59,13 +60,13 @@ class BusinessLogicTest {
 
         // given
         val now: Instant = Clock.System.now()
-        val today: LocalDateTime = now.toLocalDateTime(TimeZone.currentSystemDefault())
+        val endLocalDateTime: LocalDateTime = alwaysJune30ClockProvider.getCurrentLocalDateTime()
 // or shorter
 //        val today: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
 
         val budget = Budget(
             sum = 1000.0,
-            endLocalDateTime = today
+            endLocalDateTime = endLocalDateTime
         )
         every { expenseRepository.setBudget(budget) }.returns(budget)
 

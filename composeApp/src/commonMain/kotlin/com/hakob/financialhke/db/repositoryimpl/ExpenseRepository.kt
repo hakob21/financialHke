@@ -37,18 +37,22 @@ class ExpenseRepository(val realm: Realm) : ExpenseRepositoryInterface {
 //        setBudget(updatedBudget)
 
         realm.writeBlocking {
-            val frozenBudget = realm.query<RealmBudget>().find().first()
-            println("Hke frozenBudget ${frozenBudget}")
-            println("Hke frozenBudget id ${frozenBudget.getIdentifierOrNull()}")
-            val latest = findLatest(frozenBudget)
-            println("hke latest $latest")
-            findLatest(frozenBudget)?.let { liveBudget ->
-                // for some reason a block { } doesn't run. todo: figure out why
+            val frozenBudget = realm.query<RealmBudget>().find().firstOrNull()
+            if (frozenBudget == null) {
+                throw RuntimeException("Theres is no budget for this month")
+            } else {
+                println("Hke frozenBudget ${frozenBudget}")
+                println("Hke frozenBudget id ${frozenBudget.getIdentifierOrNull()}")
+                val latest = findLatest(frozenBudget)
+                println("hke latest $latest")
+                findLatest(frozenBudget)?.let { liveBudget ->
+                    // for some reason a block { } doesn't run. todo: figure out why
 //                {
 //                    println("hke liveBudget ${liveBudget.sum}")
 //                    println("hke expense ${expense.sum}")
-                liveBudget.sum -= expense.sum
+                    liveBudget.sum -= expense.sum
 //                }
+                }
             }
         }
 

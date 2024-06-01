@@ -57,6 +57,15 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
+#    - name: Instrumented Tests (runs only UI compose tests on Android. Runs on macos target for the reason of having Android emulator)
+#      if: matrix.os == 'macos-14' && matrix.target == 'iosSimulatorArm64Test'
+#      uses: ReactiveCircus/android-emulator-runner@v2.31.0
+#      with:
+#        api-level: 33
+#        script: ./gradlew connectedDebugAndroidTest
+
+
+
     - name: Run iOS tests
       #      this will run ios target tests in case the os is macos and target is iosEmulator
       #      but it will run ./gradlew build in case of os ubuntu and target is android
@@ -72,6 +81,22 @@ jobs:
         scheme: iosApp
         destination: platform=iOS Simulator,name=iPhone 14 Pro Max
         action: build
+
+
+      # For android emulator. For Android Instrumentation tests
+    - name: Enable KVM (Something for android emulator)
+      if: matrix.os == 'ubuntu-latest' && matrix.target == 'testDebugUnitTest'
+      run: |
+        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger --name-match=kvm
+
+    - name: Run Android Instrumentation tests
+      if: matrix.os == 'ubuntu-latest' && matrix.target == 'testDebugUnitTest'
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 29
+        script: ./gradlew connectedCheck # will run :composeApp:connectedDebugAndroidTest
 
     - name: Run gradlew build
       if: matrix.os == 'ubuntu-latest' && matrix.target == 'testDebugUnitTest'
