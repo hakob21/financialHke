@@ -78,6 +78,8 @@ jobs:
       run: |
         # Gradle build command
         ./gradlew build
+        # Gradle Android UI tests
+        ./gradlew :composeApp:connectedAndroidTest
 
 #    - name: Build with Gradle Wrapper
 ##      this will run ios target tests in case the os is macos and target is iosEmulator
