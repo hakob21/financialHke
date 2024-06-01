@@ -37,7 +37,7 @@ class UiTests {
             Screen()
         }
 
-        onNodeWithText("XCount").assertIsDisplayed()
+        onNodeWithText("Count").assertIsDisplayed()
         onNodeWithText("0").assertIsDisplayed()
         onNodeWithText("Button").assertIsDisplayed()
     }

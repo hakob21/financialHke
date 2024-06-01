@@ -21,12 +21,12 @@ if (taskIsRunningTest) {
         annotation("io.github.Mockable")
     }
 }
-tasks.withType<Test> {
-    filter {
-        setExcludePatterns("*UiTest*")
-
-    }
-}
+//tasks.withType<Test> {
+//    filter {
+//        setExcludePatterns("*UiTest*")
+//
+//    }
+//}
 kotlin {
     androidTarget {
         compilations.all {
