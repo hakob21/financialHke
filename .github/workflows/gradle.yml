@@ -73,13 +73,19 @@ jobs:
         destination: platform=iOS Simulator,name=iPhone 14 Pro Max
         action: build
 
+    - name: Instrumented Tests (runs only UI compose tests on Android. Runs on macos target for the reason of having Android emulator)
+      if: matrix.os == 'macos-14' && matrix.target == 'iosSimulatorArm64Test'
+      uses: ReactiveCircus/android-emulator-runner@v2.31.0
+      with:
+        api-level: 34
+        script: ./gradlew connectedDebugAndroidTest
+
+
     - name: Run gradlew build
       if: matrix.os == 'ubuntu-latest' && matrix.target == 'testDebugUnitTest'
       run: |
         # Gradle build command
         ./gradlew build
-        # Gradle Android UI tests
-        ./gradlew :composeApp:connectedAndroidTest
 
 #    - name: Build with Gradle Wrapper
 ##      this will run ios target tests in case the os is macos and target is iosEmulator
