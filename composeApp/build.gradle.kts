@@ -21,12 +21,17 @@ if (taskIsRunningTest) {
         annotation("io.github.Mockable")
     }
 }
-//tasks.withType<Test> {
-//    filter {
+tasks.withType<Test> {
+    filter {
 //        setExcludePatterns("*UiTest*")
-//
-//    }
-//}
+//        setExcludePatterns("com/hakob/financialhke/UiTests/**")
+
+//        https://docs.gradle.org/current/userguide/java_testing.html#test_filtering
+        excludeTestsMatching("com.hakob.financialhke.UiTests.*")
+        // or double **
+//        excludeTestsMatching("com.hakob.financialhke.UiTests.**")
+    }
+}
 kotlin {
     androidTarget {
         compilations.all {
